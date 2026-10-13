@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Documents</title>
+<style>
+  :root {
+    --sf-navy:        #001E5B;
+    --sf-type:        #002775;
+    --sf-container:   #022AC0;
+    --sf-blue:        #066AFE;
+    --sf-cloud:       #00B3FF;
+    --sf-cloud-80:    #90D0FE;
+    --sf-bg:          #CFE9FE;
+    --sf-light-bg:    #EAF5FE;
+    --sf-text:        #002775;
+    --sf-text-weak:   #4A5578;
+    --ext-teal:       #06A59A;  --ext-teal-80: #04E1CB;  --ext-teal-95:   #DEF9F3;
+    --ext-yellow:     #FCC003;  --ext-yellow-70: #E4A201; --ext-yellow-95: #FBF3E0;
+    --ext-pink:       #FF538A;  --ext-pink-40: #B60554;  --ext-pink-95:   #FEF0F3;
+    --ext-violet:     #D17DFE;  --ext-violet-30: #730394; --ext-violet-95: #F9F0FF;
+    --sf-ok:      #2E844A;  --sf-ok-bg:      #EAFCE9;
+    --sf-warn:    #DD7A01;  --sf-warn-bg:    #FFF7E6;
+    --sf-bad:     #BA0517;  --sf-bad-bg:     #FDECEB;
+    --sf-neutral: #94A3B3;  --sf-neutral-bg: #F3F6FA;
+    --client-primary: #E45B10;
+    --client-dark:    #B8480C;
+    --font-heading: 'ITC Avant Garde Gothic Demi','Avant Garde','Century Gothic','Salesforce Sans','Source Sans 3',Arial,sans-serif;
+    --font-body:    'Salesforce Sans','Source Sans 3','Helvetica Neue',Arial,sans-serif;
+    --fs-title:54px; --fs-subtitle:36px; --fs-l1:30px; --fs-cat:26px;
+    --fs-l2:24px; --fs-desc:22px; --fs-body:16px;
+    --space-xs:4px; --space-sm:8px; --space-md:16px;
+    --space-lg:24px; --space-xl:32px; --space-2xl:48px;
+    --radius-sm:4px; --radius-md:8px; --radius-lg:16px;
+    --shadow-brand:2.6px 9.7px 25px rgba(6,106,254,0.15);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-body);color:var(--sf-text);background:var(--sf-light-bg);-webkit-font-smoothing:antialiased;line-height:1.55;}
+  h1,h2,h3,.sz-stat-num{font-family:var(--font-heading);color:var(--sf-navy);line-height:1.15;}
+  a{color:var(--sf-blue);}
+  :focus-visible{outline:3px solid var(--sf-blue);outline-offset:2px;border-radius:2px;}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
+  .sz-section{margin:var(--space-2xl) 0;}
+  .sz-section-eyebrow{font-family:var(--font-heading);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-section-title{font-size:var(--fs-cat);margin-bottom:var(--space-md);}
+  .sz-card{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);}
+  .sz-card+.sz-card{margin-top:var(--space-md);}
+  .sz-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--space-md);}
+  .sz-stat{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg) var(--space-md);text-align:center;box-shadow:var(--shadow-brand);}
+  .sz-stat-num{font-size:42px;color:var(--client-primary);}
+  .sz-stat-lbl{font-size:13px;color:var(--sf-text-weak);margin-top:var(--space-xs);}
+  .sz-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-table th{background:var(--sf-container);color:#fff;font-family:var(--font-heading);text-align:left;padding:var(--space-sm) var(--space-md);font-size:14px;}
+  .sz-table td{padding:var(--space-sm) var(--space-md);border-top:1px solid var(--sf-light-bg);font-size:14px;vertical-align:top;}
+  .sz-table tbody tr:nth-child(even){background:var(--sf-light-bg);}
+  .sz-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;line-height:1.6;}
+  .sz-tag--critical{background:var(--ext-pink-95);color:var(--ext-pink-40);}
+  .sz-tag--high{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--medium{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--low{background:var(--ext-teal-95);color:var(--ext-teal);}
+  .sz-tag--info{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-s{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-m{background:#DCEBFF;color:var(--sf-blue);}
+  .sz-tag--sz-l{background:var(--sf-cloud);color:var(--sf-navy);}
+  .sz-tag--sz-xl{background:var(--sf-container);color:#fff;}
+  .sz-tag--ps{background:#F3F0FF;color:#5B21B6;}
+  .sz-tag--wsi{background:#F0FDF4;color:#15803D;}
+  .sz-tag--unknown{background:var(--sf-neutral-bg);color:var(--sf-neutral);}
+  .sz-tag--assumed{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tldr{background:var(--sf-light-bg);border-left:4px solid var(--sf-blue);border-radius:var(--radius-sm);padding:var(--space-md) var(--space-lg);margin:var(--space-lg) 0;}
+  .sz-tldr-label{font-family:var(--font-heading);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-timeline{display:flex;gap:2px;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-phase{flex:1;padding:var(--space-md);color:#fff;text-align:center;font-size:14px;}
+  .sz-phase:nth-child(1){background:var(--sf-navy);}
+  .sz-phase:nth-child(2){background:var(--sf-container);}
+  .sz-phase:nth-child(3){background:var(--sf-blue);}
+  .sz-phase-name{font-family:var(--font-heading);font-size:15px;}
+  .sz-phase-wks{opacity:.85;font-size:12px;margin-top:2px;}
+  .sz-phase-dates{opacity:.75;font-size:11px;margin-top:2px;}
+  .sz-chips{display:flex;flex-wrap:wrap;gap:var(--space-xs);}
+  .sz-chip{background:var(--sf-light-bg);color:var(--sf-container);border:1px solid var(--sf-cloud-80);border-radius:999px;padding:4px 12px;font-size:13px;}
+  .sz-cta{display:inline-block;background:var(--sf-blue);color:#fff;font-family:var(--font-heading);text-decoration:none;padding:var(--space-sm) var(--space-lg);border-radius:999px;box-shadow:var(--shadow-brand);border:none;cursor:pointer;}
+  .sz-panorama{position:relative;padding:var(--space-2xl) var(--space-xl);text-align:center;border-radius:var(--radius-lg);box-shadow:var(--shadow-brand);overflow:hidden;}
+  .sz-panorama--navy{background:linear-gradient(135deg,var(--sf-navy),var(--sf-container));color:#fff;}
+  .sz-panorama h2{color:inherit;font-size:var(--fs-l1);}
+  .sz-panorama p{color:rgba(255,255,255,.8);margin-top:var(--space-sm);}
+  .shot-btn{position:absolute;top:14px;right:16px;font-size:11px;font-weight:600;color:var(--sf-blue);background:#fff;border:1px solid var(--sf-cloud-80);border-radius:5px;padding:4px 9px;cursor:pointer;z-index:2;}
+  .shot-btn:hover{background:var(--sf-light-bg);}
+  [data-shot]{background:#fff;position:relative;}
+  @media print{.shot-btn,.sz-export{display:none;}}
+  .sz-wrap{max-width:980px;margin:0 auto;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero{background:linear-gradient(135deg,var(--sf-container),var(--sf-blue));color:#fff;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero h1{color:#fff;font-size:var(--fs-subtitle);max-width:700px;}
+  .sz-hero p{color:var(--sf-cloud-80);margin-top:var(--space-sm);font-size:16px;}
+  .sz-cobrand{display:flex;align-items:center;gap:var(--space-md);margin-bottom:var(--space-lg);}
+  .sz-cobrand svg{height:30px;width:auto;}
+  .sz-cobrand-x{color:var(--sf-cloud-80);font-size:18px;}
+  .sz-sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--sf-cloud-80);overflow-y:auto;z-index:200;display:flex;flex-direction:column;padding-bottom:var(--space-lg);transform:translateX(-100%);transition:transform .22s ease;box-shadow:4px 0 20px rgba(0,30,91,.12);}
+  .sz-sidebar.open{transform:translateX(0);}
+  .sz-sidebar-header{padding:var(--space-md) var(--space-md) var(--space-sm);display:flex;align-items:center;justify-content:space-between;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--sf-navy);border-bottom:1px solid var(--sf-cloud-80);letter-spacing:.04em;}
+  .sz-sidebar-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--sf-text-weak);line-height:1;padding:0;}
+  .sz-sidebar-close:hover{color:var(--sf-navy);}
+  .sz-sidebar-group{padding:var(--space-sm) 0;border-bottom:1px solid var(--sf-light-bg);}
+  .sz-sidebar-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-text-weak);padding:var(--space-sm) var(--space-md) 4px;}
+  .sz-sidebar-link{display:block;padding:6px var(--space-md);font-size:13px;text-decoration:none;color:var(--sf-container);border-left:3px solid transparent;line-height:1.3;}
+  .sz-sidebar-link:hover{background:var(--sf-light-bg);color:var(--sf-navy);}
+  .sz-sidebar-link.active{background:var(--sf-light-bg);border-left-color:var(--client-primary);color:var(--sf-navy);font-weight:600;}
+  .sz-sidebar-footer{margin-top:auto;padding:var(--space-md);}
+  .sz-sources-btn{display:block;text-align:center;font-size:12px;font-weight:700;padding:5px 14px;border-radius:4px;background:var(--sf-blue);color:#fff !important;text-decoration:none !important;letter-spacing:.02em;}
+  .sz-sources-btn:hover{background:var(--sf-container);}
+  .sz-sidebar-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:300;background:var(--sf-navy);color:#fff;border:none;border-radius:6px;width:36px;height:36px;font-size:18px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,91,.25);}
+  .sz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:199;}
+  .sz-overlay.active{display:block;}
+  .sz-export{text-align:center;margin:var(--space-2xl) 0 var(--space-lg);}
+  html{scroll-behavior:smooth;}
+  section{scroll-margin-top:16px;}
+  .sz-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);}
+  .sz-risk-row td:first-child{font-weight:600;}
+  .sz-legend{display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-top:var(--space-md);align-items:center;font-size:13px;color:var(--sf-text-weak);}
+  .sz-divider{border:none;border-top:1px solid var(--sf-cloud-80);margin:var(--space-2xl) 0;}
+  @media(max-width:720px){.sz-grid-2{grid-template-columns:1fr;}.sz-timeline{flex-direction:column;}.sz-stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+
+<style>
+  :root{--client-primary:#E35205;}
+  .sz-stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));}
+  .sz-stat-num{white-space:nowrap;font-size:34px;}
+  .sz-tag--confirmed{background:var(--sf-ok-bg);color:var(--sf-ok);}
+  .sz-tag--conditional{background:var(--ext-violet-95);color:var(--ext-violet-30);}
+  .sz-note{font-size:13px;color:var(--sf-text-weak);margin:var(--space-sm) 0 var(--space-md);}
+  .sz-disclaimer{font-size:12px;font-style:italic;color:var(--sf-text-weak);border-left:3px solid var(--sf-cloud-80);padding:4px 12px;margin:var(--space-md) 0;}
+  .sz-banner{background:var(--sf-warn-bg);border-left:4px solid var(--sf-warn);padding:var(--space-sm) var(--space-md);border-radius:var(--radius-sm);font-size:13px;margin:var(--space-md) 0;}
+  .sz-lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);}
+  .sz-lane{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);border-top:4px solid var(--sf-neutral);}
+  .sz-lane--anchor{border-top-color:var(--sf-ok);}
+  .sz-lane--aug{border-top-color:var(--sf-blue);}
+  .sz-lane--cond{border:2px dashed var(--ext-violet);border-top-width:4px;}
+  .sz-lane h3{font-size:18px;margin-bottom:4px;}
+  .sz-lane .big{font-family:var(--font-heading);font-size:30px;color:var(--sf-container);margin:var(--space-sm) 0 0;}
+  .sz-lane dl{font-size:13px;margin-top:var(--space-sm);}
+  .sz-lane dt{color:var(--sf-text-weak);margin-top:6px;}
+  .sz-lane dd{font-weight:600;margin:0;}
+  .num{text-align:right;white-space:nowrap;}
+  tr.sz-total td{font-weight:700;background:#DCEBFF!important;}
+  .g-wrap{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-brand);padding:var(--space-md);overflow-x:auto;}
+  .g-row{display:flex;align-items:center;min-height:28px;}
+  .g-lbl{flex:0 0 330px;font-size:12px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .g-track{position:relative;flex:1;height:22px;min-width:560px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/var(--cols,34) - 1px),var(--sf-light-bg) calc(100%/var(--cols,34) - 1px),var(--sf-light-bg) calc(100%/var(--cols,34)));}
+  .g-ticks{background:none;height:18px;}
+  .g-ticks span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--sf-text-weak);}
+  .g-bar{position:absolute;top:3px;height:16px;border-radius:3px;background:var(--sf-blue);color:#fff;font-size:10px;line-height:16px;text-align:center;overflow:hidden;}
+  .g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}
+  .g-bar--p2{background:var(--sf-container);}
+  .g-bar--p3{background:var(--sf-navy);}
+  .g-bar--p4{background:var(--client-primary);}
+  .g-bar--p5{background:var(--sf-ok);}
+  .g-bar--cond{opacity:.75;outline:2px dashed var(--ext-violet);outline-offset:1px;}
+  .g-legend{font-size:12px;color:var(--sf-text-weak);margin-top:8px;}
+  .g-key{display:inline-block;width:14px;height:10px;border-radius:2px;background:var(--sf-blue);margin:0 4px 0 12px;vertical-align:middle;}
+  .g-key.g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}.g-key.g-bar--p2{background:var(--sf-container);}.g-key.g-bar--p3{background:var(--sf-navy);}.g-key.g-bar--p4{background:var(--client-primary);}.g-key.g-bar--p5{background:var(--sf-ok);}
+  .c-seg:not([class*="g-bar--"]){background:var(--sf-blue);}
+  .c-seg.g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}.c-seg.g-bar--p2{background:var(--sf-container);}.c-seg.g-bar--p3{background:var(--sf-navy);}.c-seg.g-bar--p4{background:var(--client-primary);}.c-seg.g-bar--p5{background:var(--sf-ok);}
+  .c-row{display:flex;align-items:center;min-height:40px;}
+  .c-lbl{flex:0 0 240px;font-size:13px;font-weight:600;padding-right:8px;}
+  .c-tot{flex:0 0 70px;font-family:var(--font-heading);font-size:18px;color:var(--sf-container);text-align:right;}
+  .c-track{position:relative;flex:1;min-width:520px;height:28px;}
+  .c-ticks{height:18px;}
+  .c-ticks span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--sf-text-weak);}
+  .c-bar{display:flex;height:24px;margin-top:2px;border-radius:4px;overflow:hidden;}
+  .c-bar--cond{opacity:.75;outline:2px dashed var(--ext-violet);outline-offset:2px;}
+  .c-seg{height:100%;color:#fff;font-size:11px;line-height:24px;text-align:center;border-right:1px solid #fff;}
+  .c-gl{position:absolute;top:-2px;transform:translateX(-50%);color:#C79A00;font-size:20px;line-height:28px;text-shadow:0 0 2px #fff;}
+  .sz-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);margin-top:var(--space-md);}
+  .sz-card{background:#fff;border-radius:var(--radius-md);padding:var(--space-md);box-shadow:var(--shadow-brand);border-top:4px solid var(--sf-blue);font-size:13px;}
+  .sz-card h4{font-size:14px;margin-bottom:4px;}
+  .sz-filter button{font-size:12px;border:1px solid var(--sf-cloud-80);background:#fff;color:var(--sf-container);border-radius:999px;padding:3px 10px;margin:0 4px 6px 0;cursor:pointer;}
+  .sz-filter button.on{background:var(--sf-container);color:#fff;}
+  .sz-doc h1{font-size:26px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h2{font-size:20px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h3{font-size:16px;margin:var(--space-md) 0 var(--space-xs);}
+  .sz-doc p,.sz-doc li{font-size:14px;margin-bottom:6px;}
+  .sz-doc ul,.sz-doc ol{padding-left:22px;margin-bottom:var(--space-sm);}
+  .sz-doc table{width:100%;border-collapse:collapse;margin:var(--space-sm) 0 var(--space-md);font-size:13px;background:#fff;}
+  .sz-doc th{background:var(--sf-container);color:#fff;text-align:left;padding:6px 10px;}
+  .sz-doc td{padding:6px 10px;border-top:1px solid var(--sf-light-bg);vertical-align:top;}
+  .sz-doc blockquote{border-left:3px solid var(--sf-cloud-80);padding:4px 12px;color:var(--sf-text-weak);margin:var(--space-sm) 0;}
+  .sz-doc code{font-size:12px;background:var(--sf-light-bg);padding:1px 4px;border-radius:3px;}
+  .sz-topnav a{color:#fff;margin-right:var(--space-md);font-size:14px;}
+  @media(max-width:960px){.sz-lanes,.sz-cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="sz-hero">
+  <div class="sz-wrap" style="padding-top:0;padding-bottom:0;">
+    <div class="sz-cobrand"><svg role="img" aria-label="Salesforce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.735 144"><g><path fill-rule="nonzero" fill="rgb(17.7%,62%,87.5%)" d="M85.5 15.8C92.1 8.9 101.4 4.6 111.6 4.6c13.6 0 25.4 7.6 31.7 18.8 5.5-2.4 11.6-3.8 17.9-3.8 24.5 0 44.3 20 44.3 44.7s-19.8 44.7-44.3 44.7c-3 0-5.9-.3-8.7-.9-5.5 9.9-16.1 16.6-28.2 16.6-5.1 0-9.9-1.2-14.2-3.3C104.4 134.6 91.3 143.9 76 143.9c-15.3 0-29.5-10.1-34.7-24.2-2.3.5-4.6.7-7 .7C15.4 120.5 0 105 0 85.8c0-12.8 6.9-24 17.1-30-2.1-4.9-3.2-10.2-3.2-15.9C13.9 17.9 31.7.1 53.8.1c12.9 0 24.4 6.1 31.7 15.7"/></g><path fill="#fff" d="M29.8 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM91.5 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM133.6 67.6c0 2-.4 3.6-1.1 4.8-.7 1.1-1.9 1.7-3.5 1.7s-2.7-.5-3.4-1.7c-.7-1.1-1.1-2.8-1.1-4.8s.4-3.6 1.1-4.8c.7-1.1 1.9-1.7 3.4-1.7s1.7.5 2.5 1.7c.7 1.1 1.1 2.8 1.1 4.8m3.5-3.8c-.3-1.2-.9-2.2-1.6-3.1-.7-.9-1.6-1.6-2.7-2.1-1.1-.5-2.3-.8-3.7-.8s-2.7.3-3.8.8c-1.1.5-2 1.2-2.7 2.1-.7.9-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.3 1.2.9 2.2 1.6 3.1.7.9 1.6 1.6 2.7 2.1 1.1.5 2.3.8 3.8.8s2.7-.3 3.7-.8c1.1-.5 2-1.2 2.7-2.1.7-.9 1.2-1.9 1.6-3.1.3-1.2.5-2.4.5-3.8s-.2-2.6-.5-3.8M166 73.5c-.1-.3-.5-.2-.5-.2-.5.2-1.1.4-1.6.5-.6.1-1.2.1-1.9.1-1.7 0-3.1-.5-4.1-1.5-1-.9-1.5-2.6-1.5-4.8 0-2 .5-3.5 1.4-4.6.9-1.1 2.2-1.7 3.9-1.7 1.4 0 2.5.2 3.7.6 0 0 .3.1.4-.3.3-.9.5-1.5.8-2.4.1-.3-.1-.4-.2-.4-.5-.2-1.5-.5-2.4-.6-.8-.1-1.6-.2-2.6-.2-1.5 0-2.8.2-3.9.7-1.1.5-2.1 1.2-2.8 2-.8.9-1.3 1.9-1.7 3.1-.4 1.2-.6 2.4-.6 3.8 0 2.9.8 5.3 2.3 7 1.6 1.7 3.9 2.6 7 2.6 1.8 0 3.6-.4 4.9-.9 0 0 .3-.1.2-.4L166 73.5zM172.2 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-.9-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2.9 2.2 1.7 3 .8.9 1.8 1.5 3 2 1.2.4 2.6.7 4.3.7 3.4 0 5.3-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9H184s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M76.8 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-1-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2 1 2.2 1.7 3 .8.9 1.7 1.5 2.9 2 1.2.4 2.6.7 4.3.7 3.4 0 5.2-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9h11.9s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M51 73.4c-.5-.4-.5-.5-.6-.7-.2-.4-.3-.9-.3-1.6 0-1 .3-1.8 1.1-2.3 0 0 1-.9 3.4-.9 1.7 0 3.3.3 3.3.3v5.4s-1.5.3-3.2.4c-2.4.1-3.5-.6-3.5-.6zm4.8-8.3c-.5 0-1.1-.1-1.9-.1-.9 0-1.9.1-2.8.4-.9.2-1.7.6-2.4 1.1-.7.5-1.3 1.2-1.7 2-.4.8-.6 1.7-.6 2.8s.2 2 .5 2.7c.4.8.9 1.4 1.6 1.9.7.5 1.5.8 2.4 1 1 .2 2 .3 3.2.3 1.2 0 2.4-.1 3.6-.3 1.2-.2 2.6-.5 2.9-.6.4-.1.8-.2.8-.2.3-.1.3-.4.3-.4V64.8c0-2.4-.7-4.1-1.9-5.2-1.3-1.1-3.1-1.6-5.5-1.6-.9 0-2.3.1-3.1.3 0 0-2.6.5-3.7 1.3 0 0-.2.1-.1.5l.8 2.3c.1.3.4.2.4.2s.1 0 .2-.1c2.3-1.2 5.2-1.2 5.2-1.2 1.3 0 2.3.3 2.9.8.6.5 1 1.2 1 2.8v.5c-1-.2-1.9-.2-1.9-.2z"/><path fill="#fff" d="M151.8 58.9c.1-.3-.1-.4-.1-.4-.2-.1-1.2-.3-2-.4-1.5-.1-2.3.1-3.1.5-.7.3-1.6.9-2 1.5V58.7c0-.2-.2-.4-.4-.4h-3v17.8c0 .2.2.4.4.4h3.2c.2 0 .4-.2.4-.4V67.6c0-1.2.1-2.4.4-3.1.2-.7.6-1.3 1-1.7.4-.4.9-.7 1.4-.9.5-.2 1.1-.2 1.5-.2.6 0 1.3.2 1.3.2.2 0 .4-.1.5-.4l1.5-3.6zM122.5 50.7c-.4-.1-.7-.2-1.2-.3-.5-.1-1-.1-1.6-.1-2.1 0-3.9.6-5 1.8-1.2 1.2-2 3-2.4 5.4l-.1.8h-2.7c0 0-.3 0-.4.4l-.4 2.5c0 .2.1.4.4.4h2.6L109 76.4c-.2 1.2-.5 2.2-.7 2.9-.3.8-.5 1.3-.8 1.7-.3.4-.6.7-1 .8-.4.1-.9.2-1.4.2-.3 0-.6 0-.9-.1-.3-.1-.4-.1-.6-.2 0 0-.3-.1-.4.2l-.9 2.4c-.1.2 0 .4.1.5.4.1.6.2 1.1.3.6.2 1.2.2 1.7.2 1.1 0 2.1-.2 2.9-.5.8-.3 1.6-.8 2.2-1.6.7-.8 1.1-1.5 1.5-2.6.4-1 .7-2.4 1-4l2.7-15.1h3.9c0 0 .3 0 .4-.4l.4-2.5c0-.2-.1-.4-.4-.4h-3.8c0-.1.2-1.4.6-2.7.2-.5.5-1 .8-1.3.3-.3.6-.5 1-.6.4-.1.8-.2 1.3-.2.4 0 .7.1 1 .1.4.1.5.1.6.1.4.1.5 0 .5-.2l.9-2.5c.1-.3-.1-.4-.2-.5z"/><path fill="#fff" d="M69.3 76.5c0 .2-.2.4-.4.4h-3.2c-.2 0-.4-.2-.4-.4V51h3.6c.2 0 .4.2.4.4v25.1z"/></svg><span class="sz-cobrand-x">×</span>
+      <span style="font-family:var(--font-heading);font-size:22px;color:#fff;letter-spacing:0.04em;">PCNA</span></div>
+    <h1>Documents</h1>
+    <p>Executive summary · Solution · Delivery plan · AI delivery efficiency · Architecture decisions</p>
+    <p class="sz-topnav" style="margin-top:var(--space-md);"><a href="index.html">Overview</a><a href="scope.html">Full scope</a><a href="docs.html">Documents</a></p>
+  </div>
+</header>
+<button class="sz-sidebar-toggle" aria-label="Open navigation" onclick="document.querySelector('.sz-sidebar').classList.add('open');document.getElementById('sz-overlay').classList.add('active');">&#9776;</button>
+<div class="sz-overlay" id="sz-overlay" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');"></div>
+<nav class="sz-sidebar" aria-label="Section navigation">
+  <div class="sz-sidebar-header"><span>PCNA · Service Cloud</span>
+    <button class="sz-sidebar-close" aria-label="Close navigation" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');">&#215;</button></div>
+  <div class="sz-sidebar-group"><div class="sz-sidebar-label">Documents</div><a href="#exec" class="sz-sidebar-link">Executive summary</a><a href="#solution" class="sz-sidebar-link">Solution</a><a href="#delivery" class="sz-sidebar-link">Delivery plan</a><a href="#efficiency" class="sz-sidebar-link">AI delivery efficiency</a><a href="#adrs" class="sz-sidebar-link">Architecture decisions</a></div><div class="sz-sidebar-group"><div class="sz-sidebar-label">More</div><a href="index.html" class="sz-sidebar-link">Overview</a><a href="scope.html" class="sz-sidebar-link">Full scope</a></div>
+</nav>
+<main class="sz-wrap">
+<section id="exec" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Executive summary</h2><div class="sz-doc"><h1>PCNA Service Cloud 2026: Executive Summary</h1>
+<p><strong>Prepared for:</strong> PCNA executive sponsors and steering committee · <strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> Draft for discussion. The scope rests on working assumptions from PCNA's reverse demo; the shared scoping questions are open.</p>
+<h2>At a Glance</h2>
+<ul>
+<li><strong>Current state:</strong> PCNA is replacing Five9 with Vonage. The current AI agent, Clara, is being retired, and Salesforce has no knowledge base to answer customers or support CSRs.</li>
+<li><strong>Vision:</strong> Casey, a Salesforce AI agent, answers customers on phone and web chat, tells them where their order is, and hands off to a CSR with the full context. 100 CSRs work from one Service Cloud console with AI assistance.</li>
+<li><strong>What this delivers:</strong></li>
+<li>customer self-service on voice and chat</li>
+<li>faster CSR resolution with AI-drafted replies and summaries</li>
+<li>case teams organized by territory pod</li>
+<li><strong>Biggest unknown:</strong> the three order systems Casey reads from. Only FDM4 is named, and API access to the others is unconfirmed.</li>
+<li><strong>Recommended first step:</strong> a 3-week Phase 0 that names the order systems, completes the joint design with Vonage, and confirms the Vonage cutover date.</li>
+</ul>
+<hr />
+<h2>Overview</h2>
+<p>PCNA's move from Five9 to Vonage sets the timing for its service operation. Open CTI, the older Salesforce telephony integration, is being retired, so the Vonage connection goes through Salesforce Voice partner telephony. The same switch is the moment to replace Clara with Casey. Casey runs on Salesforce, uses PCNA's own knowledge articles to answer customers, and reads live order status.</p>
+<h2>Scope</h2>
+<p>All work happens in PCNA's existing Service Cloud org. No data migration is needed, and case types and service-level agreements stay as they are.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What PCNA gets</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Casey</strong></td>
+<td>An AI agent on phone (calls arrive from Vonage) and live web chat. It creates and updates cases, answers from Knowledge, verifies identity, reports where an order is, and transfers to a CSR.</td>
+</tr>
+<tr>
+<td><strong>Order lookup</strong></td>
+<td>Read-only order status from FDM4 and two further order systems.</td>
+</tr>
+<tr>
+<td><strong>Web channels</strong></td>
+<td>Live chat fronted by Casey, and a web-to-case form.</td>
+</tr>
+<tr>
+<td><strong>Case management</strong></td>
+<td>Parent/child cases in place of cloning, and case teams by territory pod.</td>
+</tr>
+<tr>
+<td><strong>Knowledge</strong></td>
+<td>A new Salesforce Knowledge base with an approval process. CSR policy files become internal articles.</td>
+</tr>
+<tr>
+<td><strong>CSR productivity AI</strong></td>
+<td>Service Assistant, Service Replies, Work Summary, Conversation Catch-up, AI-drafted articles and recommendations, and Next Best Action.</td>
+</tr>
+<tr>
+<td><strong>Vonage, Salesforce side</strong></td>
+<td>Partner telephony, mirrored queues and users, updated CSR and supervisor consoles.</td>
+</tr>
+<tr>
+<td><strong>Outlook</strong></td>
+<td>Escalation emails attached to the case.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Vonage owns:</strong> IVR, call and email routing, recording, transcription, the dialer, workforce management and the telephony build.</p>
+<p><strong>PCNA owns:</strong>
+- writing the Knowledge content
+- exposing the order-system APIs
+- UAT testers
+- change management and CSR classroom training</p>
+<h2>Solution Highlights</h2>
+<ul>
+<li><strong>Partner telephony with Vonage over SIP</strong>, the internet calling standard. Calls reach Casey with full call context, and Vonage remains the single router for voice and email. This depends on Vonage confirming in writing that it is a supported SIP partner.</li>
+<li><strong>One order lookup across all three systems.</strong> Casey answers "where is my order?" without needing to know which system holds the order.</li>
+<li><strong>Knowledge grounds the AI.</strong> Casey and the CSR assistive features answer from PCNA-approved articles, so the quality and timing of PCNA's content directly shape AI quality at go-live.</li>
+</ul>
+<h2>Implementation Approach</h2>
+<p><strong>34 weeks: 32 weeks to a single go-live aligned to the Vonage cutover, then 2 weeks of hypercare.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Weeks</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. Mobilization and Integration Design</td>
+<td>3</td>
+<td>Order systems named and designed; joint Vonage design signed off; cutover date set</td>
+</tr>
+<tr>
+<td>1. Foundations: Telephony, Orders and Knowledge</td>
+<td>10</td>
+<td>Vonage connected in test; order lookup live from all three systems; first articles published; case teams in test</td>
+</tr>
+<tr>
+<td>2. Casey Agent and AI Grounding</td>
+<td>7</td>
+<td>Casey passes conversation testing; grounding accepted; Outlook live</td>
+</tr>
+<tr>
+<td>3. Channels and CSR Productivity AI</td>
+<td>8</td>
+<td>Casey on voice and chat with handoff to CSRs; pilot CSRs accept the AI features</td>
+</tr>
+<tr>
+<td>4. Stabilization and Cutover</td>
+<td>4</td>
+<td>End-to-end UAT signed off; go-live on the Vonage date</td>
+</tr>
+<tr>
+<td>5. Hypercare</td>
+<td>2</td>
+<td>Production support and tuning of Casey on real conversations</td>
+</tr>
+</tbody>
+</table>
+<h3>Delivery options</h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Duration</th>
+<th>What it requires</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Standard delivery (the plan)</strong></td>
+<td>34 weeks</td>
+<td>The plan above</td>
+</tr>
+<tr>
+<td><strong>AI-assisted delivery</strong></td>
+<td>29 weeks</td>
+<td>PCNA approves Salesforce's AI development tools for use in its sandboxes</td>
+</tr>
+<tr>
+<td><strong>AI-native delivery</strong></td>
+<td>26 weeks</td>
+<td>Four PCNA commitments: an empowered product owner who decides quickly, working in short daily build-and-review cycles, an executive mandate for the approach, and approval of AI tools on PCNA data and environments</td>
+</tr>
+</tbody>
+</table>
+<p>The faster options keep a team of similar size and reach go-live sooner. Hypercare stays at 2 weeks in every option.</p>
+<p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
+<h2>Effort Summary</h2>
+<ul>
+<li><strong>Complexity:</strong> of the twelve work areas, three are large (Casey, order lookup and CSR productivity AI), seven medium and two small.</li>
+<li><strong>Salesforce team:</strong> a senior Solution Architect and a dedicated Agentforce Technical Architect lead, with a project manager, an onshore integration developer for the order systems, and offshore configuration, development and testing.</li>
+<li><strong>PCNA team:</strong> a product owner, a sponsor, CSR and supervisor experts, IT support for the order-system APIs, Knowledge authors, UAT testers, and a change and training owner. None of these roles is named yet.</li>
+</ul>
+<p>Investment is to be confirmed once commercial terms are set.</p>
+<h2>Risks and Mitigations</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Effect</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Go-live depends on the Vonage cutover date</td>
+<td>The date moves with Vonage</td>
+<td>Fix the cutover date in Phase 0 and run one joint plan across all three parties</td>
+</tr>
+<tr>
+<td>An order system lacks a usable API</td>
+<td>Order lookup grows and Casey's order answers slip</td>
+<td>Name the systems and confirm API access in Phase 0, before the build starts</td>
+</tr>
+<tr>
+<td>Vonage is not a supported SIP partner</td>
+<td>Voice falls back to a pattern without call recording, and the voice work grows</td>
+<td>Get written confirmation from Vonage in Phase 0</td>
+</tr>
+<tr>
+<td>Knowledge content is late or thin</td>
+<td>Casey and the CSR AI have little to answer from</td>
+<td>Name authors and inventory the policy files in Phase 0; start content in Phase 1</td>
+</tr>
+<tr>
+<td>CSR status gets out of sync between Vonage and Salesforce</td>
+<td>CSRs are offered a call and a chat at the same time</td>
+<td>Settle the availability design with Vonage in Phase 0</td>
+</tr>
+<tr>
+<td>PCNA roles unstaffed</td>
+<td>Decisions, content and UAT stall</td>
+<td>Name the product owner, sponsor, and change and training owner at kickoff</td>
+</tr>
+</tbody>
+</table>
+<h2>Assumptions and Confidence</h2>
+<p>The scope comes from PCNA's reverse demo and the Salesforce scoping workbook. Every area is an assumption until PCNA answers the shared questions, and order lookup is the least certain. The plan assumes 100 CSRs working in English and that Vonage is a supported SIP partner.</p>
+<h2>Next Steps</h2>
+<ol>
+<li><strong>Answer the priority questions:</strong> the two further order systems and their APIs; the Vonage cutover date and SIP-partner confirmation; the Knowledge inventory and authors.</li>
+<li><strong>Name PCNA's product owner, sponsor, and change and training owner.</strong></li>
+<li><strong>Choose a delivery option.</strong> AI-assisted delivery needs only tool approval. AI-native delivery needs the four commitments above.</li>
+<li><strong>Confirm Phase 0 start</strong>, then the commercial terms.</li>
+</ol></div></section><section id="solution" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Solution</h2><div class="sz-doc"><h1>PCNA Service Cloud 2026 — Solution</h1>
+<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> Design. Every decision rests on Salesforce team assumptions made from PCNA's reverse demo. PCNA's answers to the scoping questions are pending.</p>
+<h2>Summary</h2>
+<p>PCNA is replacing Five9 with Vonage Contact Center (CC360). Salesforce extends PCNA's existing Service Cloud org around that change:</p>
+<ul>
+<li><strong>Casey.</strong> An Agentforce Service Agent that answers customers on voice and web chat, looks up orders, and hands off to a CSR.</li>
+<li><strong>Knowledge.</strong> A new Salesforce Knowledge base that grounds Casey and the CSR AI features.</li>
+<li><strong>CSR AI.</strong> Agentforce assistive features for 100 CSRs.</li>
+<li><strong>Case management.</strong> Parent/child cases and pod-based case teams.</li>
+<li><strong>Vonage on the Salesforce side.</strong> The CSR and supervisor consoles move to Vonage.</li>
+</ul>
+<p>Vonage owns IVR, call and email routing, recording, transcription, the dialer and workforce management.</p>
+<p><strong>Three dependencies shape the whole design:</strong>
+- Vonage is assumed to be a supported Agentforce Voice SIP partner (G0002). Vonage must confirm it in Phase 0.
+- Vonage and Salesforce must agree on routing and CSR availability (G0003, G0202, G0503).
+- PCNA must supply the Knowledge content (G0006).</p>
+<hr />
+<h2>Architecture Foundations</h2>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Approach</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Org strategy</strong></td>
+<td>Extend PCNA's existing Service Cloud org. No new org and no legacy data migration. The six case types and SLAs stay as they are.</td>
+<td>workbook (brownfield);</td>
+</tr>
+<tr>
+<td><strong>Telephony model</strong></td>
+<td>Salesforce Voice with Telephony Providers (partner telephony), not Open CTI. Open CTI is deprecated and retires February 2028.</td>
+<td>ADR 0001;,</td>
+</tr>
+<tr>
+<td><strong>Routing ("one brain")</strong></td>
+<td>Vonage routes calls and email and is the only router for those. Salesforce Omni-Channel routes web chat and web-to-case. Salesforce mirrors Vonage's queues and users.</td>
+<td>;; G0003</td>
+</tr>
+<tr>
+<td><strong>CSR availability across routers</strong></td>
+<td>Rep status and capacity have to stay in step between Vonage (voice and email) and Omni-Channel (chat). If Vonage can't keep them in sync, the option is for Vonage to route chat too.</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Sharing model</strong></td>
+<td>Keep today's Case sharing settings. Pod case teams grant access but don't assign work. If Case access is Public Read/Write today, case teams add no control.</td>
+<td>,; G0706</td>
+</tr>
+<tr>
+<td><strong>Environments and DevOps</strong></td>
+<td>Source-driven deployment through a sandbox pipeline (for example DevOps Center or the Salesforce CLI with Git). AI grounding libraries can't be copied from sandbox to production, so each environment rebuilds them, and the existing proof of concept library is a reference only. A Vonage test tenant must be connected to a Salesforce sandbox for testing the SIP connection and console.</td>
+<td>;; G0105, G1209</td>
+</tr>
+<tr>
+<td><strong>Governance</strong></td>
+<td>Ownership after go-live of Casey, Knowledge and the order integrations is not yet assigned. We recommend PCNA name a service Center of Excellence lead in Phase 0.</td>
+<td>G0108, G0807, G1203 (discipline gaps)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Solution by Business Process</h2>
+<p>Epics are ordered by the customer's journey: contact, then self-service, then a CSR, then resolution. Mobilization, the Vonage platform work and the program epics come last.</p>
+<h3>E05 — Web Channels: Live Chat and Web-to-Case</h3>
+<p><strong>Business context:</strong> PCNA has no web chat or web form today; customers use email or phone. PCNA wants digital self-service that Casey answers first.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Live chat:</strong> Messaging for In-App and Web (Enhanced Chat) on PCNA's brand sites, fronted by Casey, with escalation to CSRs.
+- <strong>Web-to-case:</strong> a standard web-to-case form for customers who want to log an issue without chatting.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Chat build.</strong> Enhanced Chat v2: a messaging channel connected to Casey's inbound Omni-Channel flow, with a required fallback queue for escalation. Choose v1 instead only if PCNA needs a pre-chat form or a post-chat survey (G0502).
+- <strong>Identity on chat.</strong> Chat starts anonymous. Casey answers Knowledge questions without verification and asks the customer to verify before it shows order or case data. The method is decided with E03 (G0301, G0504).
+- <strong>Web form.</strong> The standard Web-to-Case form, plus reCAPTCHA. An Experience Cloud Create Case Form only if PCNA wants a logged-in portal (G0505).
+- <strong>Routing.</strong> Omni-Channel routes chat escalations and web-to-case cases to CSR queues. How that coexists with Vonage is the open availability question in Foundations.</p>
+<h3>E04 — Casey Voice Channel</h3>
+<p><strong>Business context:</strong> PCNA wants Casey as the voice front door in place of Clara. The touch-tone IVR stays in Vonage.</p>
+<p><strong>Solution approach:</strong> Vonage sends calls to Casey over SIP through Agentforce Voice. Casey either resolves the call or hands it back to Vonage, which routes it to a CSR with the call context.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Inbound.</strong> A SIP-over-TLS trunk runs between Vonage's session border controller and Salesforce's, and passes full call context. Vonage builds and owns the trunk. Salesforce PS builds the Salesforce channel, the inbound and outbound Omni-Channel flows and the escalation step.
+- <strong>Escalation.</strong> The call returns to Vonage by SIP transfer, with custom SIP headers carrying the reason and summary. Vonage creates the first call record and passes its ID, so Casey's and the CSR's call records stay linked. How Vonage handles its side of this is  (G0401, G0403).
+- <strong>SIP partner status is assumed (G0002).</strong> If Vonage confirms otherwise, the only option is Dynamic Routing, which can't record voice calls. That would reopen ADR 0001 and make E04 an L.
+- <strong>Voice design.</strong> Voice turns are short and tolerate interruption. Order-system calls must answer within the voice response budget (G0605).</p>
+<h3>E03 — Casey: Agentforce Service Agent</h3>
+<p><strong>Business context:</strong> Clara, PCNA's current AI agent, is retiring. The Salesforce team has started a Casey proof of concept in a sandbox.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Build.</strong> Rebuild Casey in PCNA's pipeline, using the POC as the design starting point.
+- <strong>Standard actions:</strong> create a case, update a case, check case status, answer from Knowledge, verify identity, transfer to a CSR.
+- <strong>Custom subtopics</strong> such as "Where is my order?".</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>One agent, two channels.</strong> Voice and web chat are separate connections on the same agent, each with its own inbound and outbound Omni-Channel flows and a shared escalation subagent.
+- <strong>Actions.</strong> Deterministic Flow or Apex actions for case work and order lookup; prompt-based answers only for Knowledge. Each action is small and has defined inputs and outputs.
+- <strong>Identity verification.</strong> A verified tier controls access to orders and cases (for example email one-time code, or account number plus a second factor). The method is PCNA's call (G0301).
+- <strong>Guardrails.</strong> Casey hands off on pricing, credit, pre-sales, inside sales and anything it can't commit to (G0305). A test set and pass criteria are agreed before testing starts (G0307).
+- <strong>POC reuse.</strong> The level of reuse is an assumption until Phase 0 reviews the POC. Grounding libraries from the sandbox must be rebuilt (G0011, G0308).</p>
+<h3>E06 — Order Lookup Integration</h3>
+<p><strong>Business context:</strong> Most service contacts are order questions. Order data lives in FDM4 and two other, unnamed order systems.</p>
+<p><strong>Solution approach:</strong> Casey answers "Where is my order?" through live, read-only lookups: it finds the customer's order and reports its status. <strong>Casey does not create orders</strong> (working assumption, 2026-10-13; G0102 resolved).</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Live calls, no copy.</strong> Casey calls each order system in real time. No order data is copied into Salesforce or Data Cloud. Keeping a copy is the alternative if an order system can't answer fast enough. , no source covers it (G0103).
+- <strong>Pattern.</strong> One standard order-status action for Casey, with a small adapter per order system.
+  - <strong>How each adapter is built:</strong> Apex or External Services, using secure stored credentials (Named Credentials).
+  - <strong>MuleSoft only if PCNA already runs it.</strong> Three order systems is the usual point where middleware pays off, so this is worth confirming in Phase 0 (G0602).
+- <strong>Finding the order.</strong> Casey has to work out which of the three systems holds the order, whether by order-number format, brand or order type, or by querying all three (G0603). What it returns is still open: status, ship date, carrier and tracking, production milestones (G0606).
+- <strong>Customer matching. Each order system needs an ID that links a verified Salesforce Contact or Account to its orders (G0604).
+- </strong>Reuse.** Service Assistant (E10) reuses these same actions. No separate CSR integration is built (G1005).</p>
+<h3>E07 — Case Management Enhancements</h3>
+<p><strong>Business context:</strong> CSRs clone a case to escalate it, which breaks the history. Cases sit open in queues, so reps cherry-pick the easy ones.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Parent/child cases.</strong> An escalation creates a child case linked to the parent.
+- <strong>Pod case teams.</strong> Territory-based case teams are added to cases automatically.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Parent/child.</strong> The standard Parent Case lookup, with a quick action or Flow to create the child and carry fields across. Child cases are checked against entitlement processes so SLAs aren't counted twice (G0703).
+- <strong>Pods.</strong> Predefined case teams with roles and access levels, added by assignment Flow. Pod design depends on how PCNA defines territories (G0012).
+- <strong>Cherry-picking.</strong> Case teams grant access but don't assign work. Stopping cherry-picking needs push routing (Omni-Channel or Vonage) instead of reps pulling from list views. This is decided together with the routing split (G0701, G0003).</p>
+<h3>E08 — Knowledge Management</h3>
+<p><strong>Business context:</strong> PCNA has no Knowledge in Salesforce. CSR FAQs and policies sit in documents.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Setup.</strong> Lightning Knowledge with two article types, customer FAQ and internal policy and procedure.
+- <strong>Organization.</strong> Data categories, a creation and approval process, and support for loading PCNA's initial content.
+- <strong>Policy files.</strong> CSR policy and FAQ files are converted into internal articles.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Why convert the files.</strong> Service Assistant grounds only on Knowledge and can use only one data library. A separate file library could serve Casey but not CSRs (G0901).
+- <strong>Field design.</strong> Fields used for AI are text or text area (Title, a short Summary, plus content fields). Indexing rich-text fields is unconfirmed and gets a sandbox check (G0803).
+- <strong>Visibility.</strong> A public/internal split by data category and visibility, so Casey's library can be limited to customer-safe content (G0802).
+- <strong>Approval.</strong> A standard approval process. Flow Orchestration only if PCNA needs multi-stage review (G0804).
+- <strong>Prerequisite.</strong> Check whether Classic Knowledge is already enabled. Turning on Lightning Knowledge can't be undone (G0801).
+- <strong>Content.</strong> Authoring, rewriting and the go-live article count are PCNA's (G0006, G0805). Content design is a discipline gap (G0806).</p>
+<h3>E09 — AI Grounding (Data Libraries / Data 360)</h3>
+<p><strong>Business context:</strong> Casey and the CSR AI features need accurate, current answers from PCNA's own content.</p>
+<p><strong>Solution approach:</strong> two Agentforce Data Libraries, both built on Knowledge:
+- <strong>Casey's library:</strong> public, published articles only.
+- <strong>CSR library (Service Assistant and Service Replies):</strong> public and internal articles.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>What a library sets up.</strong> Building a library creates the Data 360 data streams, search index and retriever automatically. Data 360 has to be set up in the org, with a sandbox for testing (G0904).
+- <strong>Language.</strong> English only, which matches Service Assistant's indexing limit (G0907).
+- <strong>Acceptance.</strong> Answer quality is accepted against a PCNA-approved question set and pass rate (G0906).
+- <strong>Citations.</strong> Casey's answers can't cite source articles until PCNA has a public help-center URL (G0905).</p>
+<h3>E10 — CSR Productivity AI</h3>
+<p><strong>Business context:</strong> CSRs handle cases, calls and, soon, chats without AI help.</p>
+<p><strong>Solution approach:</strong> at go-live, CSRs get:
+- <strong>Service Assistant</strong> in the case panel.
+- <strong>Work Summary and Conversation Catch-up.</strong>
+- <strong>Service Replies.</strong>
+- <strong>Article suggestions.</strong>
+- <strong>AI-drafted Knowledge articles.</strong>
+- <strong>A starter set of Next Best Action recommendations.</strong></p>
+<p><strong>Reply Recommendations is offered as a later option.</strong> It needs about 1,000 closed CSR chats, and web chat is new (G1002). Whether it goes in a later phase is PCNA's decision.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Service Assistant:</strong>
+  - Grounded on the CSR library.
+  - Instructions and subagents follow PCNA's procedures by case type, which PCNA supplies.
+  - Reuses Casey's order-lookup actions (G1003, G1005).
+- <strong>Service Replies:</strong> grounded with the Agentforce Data Library rather than Service AI Grounding. Once a library is assigned, you can't switch back (G1008).
+- <strong>Article suggestions:</strong> keyword-based Suggested Articles at go-live, because AI article recommendations have no case history yet (G1007). AI-drafted articles go into the E08 approval process (G1009).
+- <strong>Next Best Action:</strong> a small starter set of recommendations through Flow-based strategies, whose use cases PCNA confirms (G1001).
+- <strong>Voice depends on Vonage.</strong>
+  - <strong>Needs the live transcript:</strong> Service Assistant, catch-up and summaries during calls only work if Vonage writes the transcript into Salesforce during the call.
+  - <strong>Works without it:</strong> chat and case-level features don't need the live transcript.
+  -  until Vonage confirms (G1004, G0205).</p>
+<h3>E11 — Outlook Integration</h3>
+<p><strong>Business context:</strong> CSRs email PCNA staff and vendors about escalations from Outlook, outside the Email-to-Case queue. Those emails never reach the case.</p>
+<p><strong>Solution approach:</strong> the Outlook integration with Einstein Activity Capture, with "Sync Email as Salesforce Activity" turned on so emails are stored in core Salesforce, where CSRs and the AI can use them.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Where emails are stored.</strong> Activity Capture stores email outside core Salesforce unless sync is on.
+- <strong>Linking to the case.</strong> No source confirms Activity Capture can link an email to a Case automatically. The fallback is reps relating emails to cases from the Outlook side panel.  (G1101, G1102).
+- <strong>Excluded domains.</strong> Capture must not exclude PCNA's own domains, or it would drop the internal escalation emails (G1103).
+- <strong>Connected users.</strong> Only primary Microsoft 365 mailboxes in UPN format can connect, so shared or alias mailboxes won't work (G1107).
+- <strong>PCNA's part.</strong> PCNA gives Microsoft 365 tenant admin consent (G1109).</p>
+<h3>E02 — Vonage Partner Telephony and Consoles (Salesforce side)</h3>
+<p><strong>Business context:</strong> the Five9 connector is being replaced. CSRs and supervisors need Vonage inside the Salesforce console.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Connection.</strong> Enable partner telephony, repoint the contact-center connection to Vonage, and mirror its queues and users.
+- <strong>CSR console.</strong> Update the console layouts for CSRs.
+- <strong>Supervisor console.</strong> Embed Vonage's supervisor console in Omni-Channel Command Center.
+- <strong>Call data.</strong> Show the transcripts, recordings and sentiment that Vonage writes to Salesforce.</p>
+<p><strong>Supporting architecture:</strong>
+- <strong>Queue sync.</strong> Queues and users sync through Salesforce's standard queue-sync interfaces (<code>QueueManager</code>, <code>QueueSetup</code>), with Vonage as the master. Whether Vonage's connector supports this is  (G0201).
+- <strong>Users and permissions.</strong> CSR and supervisor users are matched between Vonage and Salesforce, with permission sets for partner telephony (G0207).
+- <strong>Command Center embed.</strong> Embedding the Vonage supervisor console is an assumption that Vonage provides an embeddable component.  (G0204).
+- <strong>Call data on records.</strong> Which records Vonage writes transcripts, recordings and sentiment to is confirmed with Vonage (G0205).
+- <strong>Cutover.</strong> The switch from Five9 to Vonage on the Salesforce side is planned with E12 (G0206, G1205).</p>
+<h3>E01 — Phase 0: Mobilization and Integration Design</h3>
+<p><strong>Business context:</strong> the order systems, the Vonage behavior and the POC state are all unknown today.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Order systems.</strong> Design the FDM4 and other order-system interfaces.
+- <strong>Vonage.</strong> Run the joint design for the SIP trunk, routing, availability and queue sync.
+- <strong>Casey.</strong> Assess the POC for reuse and lock the subtopic list.
+- <strong>Knowledge.</strong> Lock the content scope.
+- <strong>Org.</strong> Inventory the current org.</p>
+<p><strong>Exit criteria and PCNA sign-off owners are defined at kickoff (G0101).</strong> The biggest output of Phase 0 is resizing E03, E04, E06 and E10 against real answers.</p>
+<h3>E12 — Program Management, Knowledge Transfer and Hypercare</h3>
+<p><strong>Business context:</strong> 100 CSRs get a new softphone, chat channel, pods and AI assistance at once, across three delivery parties: PCNA, Salesforce PS and Vonage.</p>
+<p><strong>Solution approach:</strong>
+- <strong>Program management.</strong> Governance across all parties.
+- <strong>Knowledge transfer.</strong> Admin documentation and handover to PCNA's Salesforce admins.
+- <strong>Cutover.</strong> Coordinate the Vonage cutover, with a phased-versus-big-bang decision and a rollback plan.
+- <strong>Baseline.</strong> Capture baseline KPIs before Five9 is switched off.
+- <strong>Hypercare.</strong> Two weeks of post-go-live support.</p>
+<p><strong>PCNA owns change management and CSR classroom training (G0019).</strong> The fit with the Vonage cutover sets the critical path (G0008).</p>
+<hr />
+<h2>Estimates</h2>
+<p>Sizes show <strong>relative complexity, not effort.</strong> They can't be converted to hours or multiplied by a rate to get a price.</p>
+<table>
+<thead>
+<tr>
+<th>Epic</th>
+<th>Size</th>
+<th>Confidence</th>
+<th>Driven by</th>
+<th>If an assumption breaks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>E01 Phase 0</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Design for three order systems plus joint design with Vonage</td>
+<td>—</td>
+</tr>
+<tr>
+<td>E02 Vonage telephony and consoles</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Partner-telephony setup, queue sync, consoles, Command Center</td>
+<td>L if Vonage can't sync queues the standard way</td>
+</tr>
+<tr>
+<td>E03 Casey agent</td>
+<td>L</td>
+<td>Assumed</td>
+<td>WISMO plus other subtopics, identity verification, guardrails, testing and tuning</td>
+<td>XL if more than ~5 custom subtopics</td>
+</tr>
+<tr>
+<td>E04 Casey voice</td>
+<td>M</td>
+<td>Assumed</td>
+<td>SIP connection and the handback with call context</td>
+<td>— (SIP partner assumed)</td>
+</tr>
+<tr>
+<td>E05 Web chat and web-to-case</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Chat flows, chat verification, widget and form</td>
+<td>L if a portal is needed</td>
+</tr>
+<tr>
+<td>E06 Order lookup</td>
+<td>L</td>
+<td>Unknown</td>
+<td>Three order systems with unknown APIs; finding which holds the order</td>
+<td>XL if a system has no usable API or carrier tracking is a separate source</td>
+</tr>
+<tr>
+<td>E07 Case management</td>
+<td>S</td>
+<td>Assumed</td>
+<td>Parent/child cases and case teams</td>
+<td>M if the case sharing model needs reworking</td>
+</tr>
+<tr>
+<td>E08 Knowledge</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Article types and categories, approval process, converting the policy files</td>
+<td>L if PCNA can't supply content</td>
+</tr>
+<tr>
+<td>E09 AI grounding</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Two library scopes and answer-quality testing</td>
+<td>L if a separate file library is still needed</td>
+</tr>
+<tr>
+<td>E10 CSR AI</td>
+<td>L</td>
+<td>Assumed</td>
+<td>Six features, bumped up for breadth</td>
+<td>—</td>
+</tr>
+<tr>
+<td>E11 Outlook</td>
+<td>S</td>
+<td>Assumed</td>
+<td>Standard Outlook and Activity Capture setup</td>
+<td>M if emails need custom work to link to cases</td>
+</tr>
+<tr>
+<td>E12 Program, knowledge transfer and hypercare</td>
+<td>M</td>
+<td>Assumed</td>
+<td>Three-party delivery, Vonage cutover, hypercare</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Distribution:</strong> 3 L, 7 M, 2 S. The project fits the benchmark band for customer-facing AI plus integration. That band is model-derived, not drawn from delivered PCNA-like deals.</p>
+<h2>Grounding</h2>
+<p>17 load-bearing decisions are tagged:
+- <strong>10 grounded</strong> in the central knowledge base.
+- <strong>4 inferred</strong> from grounded patterns.
+- <strong>3 flagged as assumptions:</strong>
+  - Keeping CSR availability in sync across Vonage and Omni-Channel.
+  - Activity Capture linking emails to a Case automatically.
+  - The health of the existing org.</p>
+<p>Anything that depends on Vonage's own behavior is  until Vonage provides documentation. That covers SIP partner status, queue sync, the voice handback, the supervisor embed and the live transcript.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>PCNA Service Cloud 2026: Delivery Plan</h1>
+<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> Draft. Scope assumptions are open until PCNA answers the shared questions.</p>
+<p><strong>Total program duration: 34 weeks (per user commitment):</strong> 32 weeks to go-live plus 2 weeks of hypercare. There is one go-live, aligned to the Vonage cutover.</p>
+<p>The plan runs in six phases. Phase 0 settles the order-system and Vonage design. Phase 1 builds the foundations Casey needs: telephony, order lookup and Knowledge. Phase 2 builds Casey and its grounding. Phase 3 puts Casey on voice and web chat and turns on the CSR AI features. Phase 4 runs UAT and cutover. Phase 5 is two weeks of post-go-live hypercare. PCNA runs change management and trains its 100 CSRs; Salesforce PS provides knowledge transfer and admin documentation.</p>
+<p><strong>Critical path:</strong> E01 Phase 0 → E06 Order Lookup → E03 Casey → E04 Casey Voice → E12 Cutover. A slip in the order-system design or the Casey build moves the go-live.</p>
+<h2>Phases</h2>
+<h3>Phase 0: Mobilization and Integration Design (3 weeks)</h3>
+<p><strong>Epics:</strong> E01
+- <strong>Goal:</strong> mobilize the three parties (PCNA, Vonage and Salesforce) and close the gaps that set scope.
+  - <strong>Order systems:</strong> name all three, confirm API access, and define how Casey works out which system holds an order and what "Where is my order?" returns.
+  - <strong>Vonage joint design:</strong> the SIP trunk, queue and user sync, the handback to CSRs, and the routing split.
+- <strong>Done when:</strong>
+  - The order-system design is signed off.
+  - Vonage has confirmed in writing that it is a supported SIP partner, and the cutover date is set.
+  - PCNA's Knowledge content inventory and authors are named.
+- <strong>Why a Phase 0:</strong> 114 gaps are open, and the scoping workbook already places order-system design in Phase 0.</p>
+<h3>Phase 1: Foundations: Telephony, Orders and Knowledge (10 weeks)</h3>
+<p><strong>Epics:</strong> E02 Vonage partner telephony and consoles · E06 Order Lookup · E07 Case Management · E08 Knowledge · <em>depends on: E01</em>
+- <strong>Goal:</strong>
+  - Connect Vonage through Salesforce Voice partner telephony.
+  - Sync Vonage queues and users and update the CSR and supervisor consoles.
+  - Build the read-only order-status action with one adapter per order system. It goes first because it carries the most uncertainty.
+  - Set up Knowledge and start converting CSR policy files into articles. Content is PCNA's longest-running task.
+  - Add parent/child cases and case teams.
+- <strong>Done when:</strong>
+  - Vonage is connected in a sandbox, with queue and user sync working.
+  - The order action returns live results from all three systems.
+  - The first articles are published through the approval process.
+  - Case teams are live in testing.</p>
+<h3>Phase 2: Casey Agent and AI Grounding (7 weeks)</h3>
+<p><strong>Epics:</strong> E03 Casey · E09 AI Grounding · E11 Outlook · <em>depends on: E06, E08</em>
+- <strong>Goal:</strong>
+  - Build Casey: case actions, Knowledge answers, identity verification, transfer to a CSR, and the "Where is my order?" subtopic.
+  - Configure the two Knowledge-based Data Libraries.
+  - Deliver the Outlook integration.
+- <strong>Done when:</strong>
+  - Casey passes the conversation test sets.
+  - Grounding acceptance tests pass on both libraries.
+  - Escalation emails land on the Case.</p>
+<h3>Phase 3: Channels and CSR Productivity AI (8 weeks)</h3>
+<p><strong>Epics:</strong> E04 Casey Voice · E05 Web Chat and Web-to-Case · E10 CSR Productivity AI · <em>depends on: E02, E03, E09</em>
+- <strong>Goal:</strong>
+  - Put Casey on voice, with calls from Vonage over SIP.
+  - Put Casey on live web chat through Enhanced Chat and launch web-to-case.
+  - Turn on the CSR features: Service Assistant, Service Replies, Work Summary, Conversation Catch-up, Knowledge drafting and recommendations, and Next Best Action.
+- <strong>Done when:</strong>
+  - Calls through Vonage reach Casey and hand back to a CSR with context.
+  - Chat escalates from Casey to a CSR.
+  - Pilot CSRs accept the AI features.</p>
+<h3>Phase 4: Stabilization and Cutover (4 weeks)</h3>
+<p><strong>Epics:</strong> E12 · <em>depends on: E04, E05, E10</em>
+- <strong>Goal:</strong>
+  - Run end-to-end UAT across all three parties.
+  - Cut over on the Vonage go-live.
+  - Hand over to PCNA admins: knowledge transfer and admin documentation. PCNA delivers CSR training and change management (G0019).
+- <strong>Done when:</strong>
+  - UAT is signed off.
+  - Go-live happens on the Vonage date.
+- <strong>Program management</strong> runs across every phase. It sits here only for scheduling.</p>
+<h3>Phase 5: Hypercare (2 weeks)</h3>
+<p><strong>Epics:</strong> E12 · <em>depends on: go-live</em>
+- <strong>Goal:</strong> post-go-live support. Triage and fix production issues across Casey, voice, chat and the CSR AI features, and tune Casey on real conversations.
+- <strong>Done when:</strong> the hypercare exit criteria are met and support has passed to PCNA.</p>
+<h2>Standard Processes (all phases)</h2>
+<ul>
+<li><strong>Testing:</strong> each phase has its own system testing. Agent work adds conversation test sets and grounding acceptance tests. End-to-end UAT, including Vonage, runs in Phase 4.</li>
+<li><strong>Deployment:</strong> changes are promoted through sandboxes to production in the existing brownfield org. Production cutover happens once, aligned to Vonage.</li>
+<li><strong>Enablement:</strong> PCNA owns change management and CSR classroom training (G0019). CSRs get a new softphone, web chat, AI assistance and case teams all at once, so PCNA's plan needs to start by Phase 2. Salesforce PS provides knowledge transfer and admin documentation.</li>
+</ul>
+<h2>Key Risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Phase</th>
+<th>Effect on schedule</th>
+<th>Tracked in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Go-live depends on the Vonage cutover date</td>
+<td>0, 4</td>
+<td>The date moves with Vonage, not with our build</td>
+<td>G0008, G0018</td>
+</tr>
+<tr>
+<td>An order system has no usable API, or tracking comes from a separate carrier source</td>
+<td>1</td>
+<td>E06 grows from L to XL, and Casey's order subtopic slips</td>
+<td>G0005, G0603, G0606</td>
+</tr>
+<tr>
+<td>Vonage turns out not to be a SIP partner</td>
+<td>0, 3</td>
+<td>ADR 0001 reopens; E04 grows from M to L (Dynamic Routing, which has no call recording)</td>
+<td>G0002</td>
+</tr>
+<tr>
+<td>PCNA Knowledge content is late or thin</td>
+<td>1–2</td>
+<td>Casey and CSR AI have too little content to ground on</td>
+<td>G0006, G0901</td>
+</tr>
+<tr>
+<td>Vonage handback, real-time transcript and supervisor embed behave differently than assumed</td>
+<td>3</td>
+<td>Voice and console rework</td>
+<td>G0401, G0403, G1004</td>
+</tr>
+<tr>
+<td>CSR availability isn't synced between Vonage and Omni-Channel</td>
+<td>3</td>
+<td>CSRs get offered chat and calls at the same time</td>
+<td>G0015</td>
+</tr>
+<tr>
+<td>Casey needs more than ~5 custom subtopics</td>
+<td>2</td>
+<td>E03 grows from L to XL</td>
+<td>G0004</td>
+</tr>
+</tbody>
+</table>
+<h2>Team</h2></div></section><section id="efficiency" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">AI delivery efficiency</h2><div class="sz-doc"><h1>AI Delivery Efficiency Analysis — PCNA Service Cloud 2026</h1>
+<h2>So What</h2>
+<p><strong>~10–21% realized delivery efficiency at Mid readiness.</strong> A pace and quality lift within the same team shape — not headcount reduction, not a pricing input.</p>
+<p>Where the gains show up on this project:
+- <strong>Documentation and Knowledge</strong> (~10–23%): turning CSR policy files into Knowledge articles (E08) and writing admin and handover documentation (E12). This text-heavy work is where AI tools help most.
+- <strong>Analysis and Design</strong> (~10–21%): Casey's topic and order-lookup ("Where is my order?") design (E03) and the Phase 0 integration design (E01). Drafts come fast; the decisions do not.
+- <strong>Technical Engineering and QA</strong> (~7–18%): order-system adapters (E06) and Casey conversation test sets (E03, E04). Review of AI-written code against three unfamiliar order systems limits the gain.</p>
+<p><strong>Where AI does not help</strong>: coordinating three parties (Vonage, PCNA IT and Salesforce Professional Services), aligning cutover to the Vonage go-live date, and reviewing code written against the order-system APIs.</p>
+<p><strong>To move up to High readiness (~12–25%)</strong>: approve our AI tools on PCNA sandboxes, publish a position on how AI may handle PCNA data, and commit to a weekly decision rhythm across all three parties.</p>
+<h2>Headline</h2>
+<p><strong>Realized: ~10–21%</strong> (Mid readiness) · <strong>Task-level blend: ~30–45%</strong> · <strong>Realization factor: 0.35–0.45</strong>, mixed row: standard Service Cloud and Agentforce configuration, plus custom order adapters and a partner telephony integration · <strong>Confidence: Assumed</strong></p>
+<p><strong>AI-native band: ~20–29%. Conditional and provisional.</strong> It applies only if PCNA commits to the AI-native way of working:
+- decision speed (M1)
+- daily build/demo/decide increments (M2)
+- an executive mandate (M3)
+- approved AI tooling (M4)</p>
+<p>Why "provisional": the case that AI-native delivery is faster is well supported (DORA [5][6], METR [1]). The size of the gain is not: it comes from vendor reports and has not been calibrated against delivered projects.</p>
+<h2>Client-Readiness Scenarios</h2>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Realized Band</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Low readiness</td>
+<td>~8–17%</td>
+<td>AI tooling not approved, or decisions stall across the three parties. Gains stay in documentation and test generation.</td>
+</tr>
+<tr>
+<td>Mid readiness (current ✓)</td>
+<td>~10–21%</td>
+<td>Our tools assumed allowed, normal decision pace. Gains land in Knowledge conversion, Casey test sets and design work.</td>
+</tr>
+<tr>
+<td>High readiness</td>
+<td>~12–25%</td>
+<td>Tools approved, fast decisions, clean test environments. Gains reach configuration, adapters and regression testing.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Current scenario</strong>: Mid (score 4/8)</p>
+<h3>Signals behind the score</h3>
+<ul>
+<li><strong>AI tooling posture</strong>: 1/2. Unknown, held at the default: we don't know whether PCNA allows AI tools on its data. <em>Clarification question.</em></li>
+<li><strong>Delivery velocity / speed bias</strong>: 1/2. Unknown, held at the default: no evidence on how fast PCNA decides or how it likes to iterate. <em>Clarification question.</em></li>
+<li><strong>Data and environment hygiene</strong>: 1/2. An existing Service Cloud org with sandboxes, plus the sandbox where a Salesforce team started a Casey proof of concept. Order-system test data and a Vonage sandbox are unconfirmed.</li>
+<li><strong>Legal / security / compliance posture</strong>: 1/2. Unknown, held at the default: no stated regulations or policy on AI handling PCNA data. <em>Clarification question.</em></li>
+</ul>
+<h3>What it takes to move up</h3>
+<ul>
+<li><strong>Low → Mid</strong>: approve our AI tools on PCNA sandboxes and Knowledge content; name a PCNA product owner who can make decisions.</li>
+<li><strong>Mid → High</strong>: publish a position on AI handling order and customer data; commit to weekly decisions across PCNA, Vonage and Salesforce; confirm order-system test data and the Vonage sandbox.</li>
+</ul>
+<h2>By Category</h2>
+<h3>Technical Engineering &amp; QA — realized ~7–18% (task-level ~20–40%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E06 Order Lookup Integration (L), E03 Casey (L), E04 Casey Voice (M), E02 Vonage Telephony (M)</li>
+<li><strong>How it shows up here</strong>: AI drafts adapter code and conversation test sets quickly [4]. Every adapter still needs review against three order systems we haven't seen, and Vonage-side behavior can't be tested by AI. That review and testing is where the extra overhead sits [1][5][12].</li>
+</ul>
+<h3>Analysis &amp; Design — realized ~10–21% (task-level ~30–45%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E01 Phase 0 (M), E03 Casey (L), E10 CSR Productivity AI (L)</li>
+<li><strong>How it shows up here</strong>: Casey's topic map, the order-lookup flow and Phase 0 design documents draft quickly [2]. The joint decisions with Vonage and PCNA IT still take as long as the meetings do.</li>
+</ul>
+<h3>Documentation &amp; Knowledge Management — realized ~10–23% (task-level ~30–50%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E08 Knowledge (M), E12 Program Management, Knowledge Transfer and Hypercare (M), E09 AI Grounding (M)</li>
+<li><strong>How it shows up here</strong>: this is the best fit. Converting policy files into articles and writing admin documentation is text-heavy work [11]. PCNA authors approve the content, which caps the gain.</li>
+</ul>
+<h3>Project Management &amp; Operations — realized ~5–14% (task-level ~15–30%)</h3>
+<ul>
+<li><strong>Driving epics</strong>: E12 (M)</li>
+<li><strong>How it shows up here</strong>: status drafts and action tracking get faster [11]. Coordinating three parties and the cutover does not.</li>
+</ul>
+<h2>Human-Only Work</h2>
+<ul>
+<li><strong>Project Pulse Reports</strong>: building trust is people's work. AI can summarize the status but not run the conversation.</li>
+<li><strong>Stakeholder Alignment</strong>: a negotiation between people. AI drafts positions; people decide.</li>
+<li><strong>Conflict Resolution</strong>: needs human judgment.</li>
+<li><strong>Three-party coordination with Vonage and PCNA IT</strong>: joint decisions on the SIP connection, routing and order APIs move at the pace of three organizations.</li>
+<li><strong>Cutover alignment</strong>: Vonage's cutover sets the go-live date, not build speed.</li>
+</ul>
+<h2>Assumptions &amp; Caveats</h2>
+<ul>
+<li>Task-level gains come from published 2022–2026 studies. A realization factor, chosen by project shape, converts them to project level. It accounts for Amdahl's law (only part of the effort speeds up), review overhead and work that AI doesn't move.</li>
+<li><strong>Honest range for coding</strong>: controlled trials range from −19% (METR 2025 [1], experienced open-source developers) to +21% (Paradis/Google 2024 [4], complex enterprise work) to +55% (Peng/GitHub 2022 [3], a small new-build lab task). The realistic-enterprise figure is the defensible starting point for Salesforce integration and custom work.</li>
+<li>Individual gains are not team gains. DORA [5] finds throughput rising with AI while delivery stability still falls. Base claims on project outcomes, not developers' own reports.</li>
+<li>AI model capability is advancing faster than real-world workflow gains (Stanford HAI 2026 [9]). That gap is why project-level bands stay in the ~10–25% range.</li>
+<li>Three of the four readiness signals are unscored and held at the default.</li>
+<li>Bands are qualitative and specific to this project. They imply no hours, FTE or cost.</li>
+</ul>
+<h2>Sources</h2>
+<ol>
+<li>METR (2025; Feb 2026 follow-up): randomized trial; experienced developers measured ~19% slower with AI, mainly from review burden.</li>
+<li>BCG × Harvard (Dell'Acqua et al., 2023): consultants ~25% faster with ~40% higher quality on tasks AI handles well; ~23% worse on tasks it doesn't.</li>
+<li>Peng et al., GitHub (2022): ~55% faster on a small new-build lab task.</li>
+<li>Paradis et al., Google (2024): ~21% time reduction on a complex enterprise task.</li>
+<li>DORA 2025: AI raises throughput, but delivery stability still falls.</li>
+<li>DORA 2025 framing: AI amplifies the team and system it is added to.</li>
+<li>Stanford HAI AI Index 2026: AI capability vs. real-world adoption.</li>
+<li>Salesforce internal delivery observations (2025–2026): documentation and meeting work show the most reliable gains.</li>
+<li>Faros AI (2026): throughput rises while QA load and incidents climb.</li>
+</ol></div></section><section id="adrs" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Architecture decision records</h2><div class="sz-doc"><h1>0001 — Vonage replaces Five9 and connects through Salesforce partner telephony; Casey takes voice calls over SIP</h1>
+<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> accepted (ratified 2026-10-13) · <strong>Source:</strong> Salesforce-recommended</p>
+<h2>Context</h2>
+<p>PCNA is replacing Five9 with Vonage Contact Center as its telephony platform. Vonage owns IVR, call routing, recording, transcription, the outbound dialer and workforce management. Salesforce PS owns the Service Cloud side, including Casey, an Agentforce Service Agent that replaces PCNA's current "Clara" AI agent on voice and web chat. Open CTI is deprecated and retiring in February 2028, and it is unavailable for new Agentforce Service orgs. Agentforce Voice requires, at minimum, Salesforce Voice with Telephony Providers to be enabled.</p>
+<h2>Decision</h2>
+<ul>
+<li>The Vonage integration uses <strong>Salesforce Voice with Telephony Providers (partner telephony)</strong>, never Open CTI.</li>
+<li>Casey receives calls from Vonage over <strong>SIP</strong>. SIP passes full call context and needs no extra telecom licensing, but it is limited to vetted partners and requires a SIP-over-TLS trunk between Vonage's session border controller (SBC) and Salesforce's.</li>
+<li>Vonage remains the call router ("one brain"). Salesforce mirrors Vonage queues and users and repoints the contact-center connection from Five9 to Vonage.</li>
+</ul>
+<h2>Consequences</h2>
+<ul>
+<li>Every voice and console epic assumes the partner-telephony model. Open CTI softphone work is out of scope.</li>
+<li><strong>Dependency:</strong> Vonage must be a supported Agentforce Voice SIP partner (open question G0002). This was assumed on 2026-10-13; Vonage still has to confirm it in writing. If it isn't, the fallback is Dynamic Routing, which works with any partner that can make an API call but doesn't support voice call recording. That fallback reopens this ADR.</li>
+<li>Vonage owns the SIP trunk and its partner-side configuration. Salesforce PS owns the Salesforce-side channel, the Omni-Channel flows to Casey and the escalation path to a rep.</li>
+</ul>
+<h2>Grounds</h2>
+<ul>
+<li>Salesforce team, 2026-10-13 discovery interview: "We will use partner telephony b/c open CTI is discontinued"; "SIP telephony is assumed"; "customer is replacing Five 9s with Vonage."</li>
+<li>Scoping workbook, Supervisor row: <em>"Assuming 'Queue Mirror' + SIP Trunks for Agentforce Voice capabilities"</em>; Case Routing row: <em>"PCNA wants 1 brain and Vonage is proposing external routing feature."</em></li>
+<li>Retirement date: the user gave Feb 2027 in conversation. The KB atom KA-5475 (official) says <strong>February 2028</strong>. This ADR uses the documented date. The decision is the same either way.</li>
+</ul></div></section>
+<hr class="sz-divider">
+<p class="sz-note">Prepared by Salesforce Professional Services · October 2026 · Draft for discussion · Pricing not included.</p>
+</main>
+<script>
+document.querySelectorAll('.sz-sidebar-link').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');});});
+document.querySelectorAll('.sz-filter').forEach(function(f){
+  var tbl=document.getElementById(f.dataset.table);
+  f.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+    f.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+    tbl.querySelectorAll('tbody tr').forEach(function(tr){tr.style.display=(b.dataset.cat==='all'||tr.dataset.cat===b.dataset.cat)?'':'none';});
+  });});
+});
+</script>
+</body>
+</html>

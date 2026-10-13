@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Service Cloud and Agentforce with Vonage</title>
+<style>
+  :root {
+    --sf-navy:        #001E5B;
+    --sf-type:        #002775;
+    --sf-container:   #022AC0;
+    --sf-blue:        #066AFE;
+    --sf-cloud:       #00B3FF;
+    --sf-cloud-80:    #90D0FE;
+    --sf-bg:          #CFE9FE;
+    --sf-light-bg:    #EAF5FE;
+    --sf-text:        #002775;
+    --sf-text-weak:   #4A5578;
+    --ext-teal:       #06A59A;  --ext-teal-80: #04E1CB;  --ext-teal-95:   #DEF9F3;
+    --ext-yellow:     #FCC003;  --ext-yellow-70: #E4A201; --ext-yellow-95: #FBF3E0;
+    --ext-pink:       #FF538A;  --ext-pink-40: #B60554;  --ext-pink-95:   #FEF0F3;
+    --ext-violet:     #D17DFE;  --ext-violet-30: #730394; --ext-violet-95: #F9F0FF;
+    --sf-ok:      #2E844A;  --sf-ok-bg:      #EAFCE9;
+    --sf-warn:    #DD7A01;  --sf-warn-bg:    #FFF7E6;
+    --sf-bad:     #BA0517;  --sf-bad-bg:     #FDECEB;
+    --sf-neutral: #94A3B3;  --sf-neutral-bg: #F3F6FA;
+    --client-primary: #E45B10;
+    --client-dark:    #B8480C;
+    --font-heading: 'ITC Avant Garde Gothic Demi','Avant Garde','Century Gothic','Salesforce Sans','Source Sans 3',Arial,sans-serif;
+    --font-body:    'Salesforce Sans','Source Sans 3','Helvetica Neue',Arial,sans-serif;
+    --fs-title:54px; --fs-subtitle:36px; --fs-l1:30px; --fs-cat:26px;
+    --fs-l2:24px; --fs-desc:22px; --fs-body:16px;
+    --space-xs:4px; --space-sm:8px; --space-md:16px;
+    --space-lg:24px; --space-xl:32px; --space-2xl:48px;
+    --radius-sm:4px; --radius-md:8px; --radius-lg:16px;
+    --shadow-brand:2.6px 9.7px 25px rgba(6,106,254,0.15);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--font-body);color:var(--sf-text);background:var(--sf-light-bg);-webkit-font-smoothing:antialiased;line-height:1.55;}
+  h1,h2,h3,.sz-stat-num{font-family:var(--font-heading);color:var(--sf-navy);line-height:1.15;}
+  a{color:var(--sf-blue);}
+  :focus-visible{outline:3px solid var(--sf-blue);outline-offset:2px;border-radius:2px;}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;}}
+  .sz-section{margin:var(--space-2xl) 0;}
+  .sz-section-eyebrow{font-family:var(--font-heading);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-section-title{font-size:var(--fs-cat);margin-bottom:var(--space-md);}
+  .sz-card{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);}
+  .sz-card+.sz-card{margin-top:var(--space-md);}
+  .sz-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:var(--space-md);}
+  .sz-stat{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg) var(--space-md);text-align:center;box-shadow:var(--shadow-brand);}
+  .sz-stat-num{font-size:42px;color:var(--client-primary);}
+  .sz-stat-lbl{font-size:13px;color:var(--sf-text-weak);margin-top:var(--space-xs);}
+  .sz-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-table th{background:var(--sf-container);color:#fff;font-family:var(--font-heading);text-align:left;padding:var(--space-sm) var(--space-md);font-size:14px;}
+  .sz-table td{padding:var(--space-sm) var(--space-md);border-top:1px solid var(--sf-light-bg);font-size:14px;vertical-align:top;}
+  .sz-table tbody tr:nth-child(even){background:var(--sf-light-bg);}
+  .sz-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;line-height:1.6;}
+  .sz-tag--critical{background:var(--ext-pink-95);color:var(--ext-pink-40);}
+  .sz-tag--high{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--medium{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tag--low{background:var(--ext-teal-95);color:var(--ext-teal);}
+  .sz-tag--info{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-s{background:var(--sf-light-bg);color:var(--sf-blue);}
+  .sz-tag--sz-m{background:#DCEBFF;color:var(--sf-blue);}
+  .sz-tag--sz-l{background:var(--sf-cloud);color:var(--sf-navy);}
+  .sz-tag--sz-xl{background:var(--sf-container);color:#fff;}
+  .sz-tag--ps{background:#F3F0FF;color:#5B21B6;}
+  .sz-tag--wsi{background:#F0FDF4;color:#15803D;}
+  .sz-tag--unknown{background:var(--sf-neutral-bg);color:var(--sf-neutral);}
+  .sz-tag--assumed{background:var(--ext-yellow-95);color:var(--ext-yellow-70);}
+  .sz-tldr{background:var(--sf-light-bg);border-left:4px solid var(--sf-blue);border-radius:var(--radius-sm);padding:var(--space-md) var(--space-lg);margin:var(--space-lg) 0;}
+  .sz-tldr-label{font-family:var(--font-heading);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-blue);margin-bottom:var(--space-xs);}
+  .sz-timeline{display:flex;gap:2px;border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-brand);}
+  .sz-phase{flex:1;padding:var(--space-md);color:#fff;text-align:center;font-size:14px;}
+  .sz-phase:nth-child(1){background:var(--sf-navy);}
+  .sz-phase:nth-child(2){background:var(--sf-container);}
+  .sz-phase:nth-child(3){background:var(--sf-blue);}
+  .sz-phase-name{font-family:var(--font-heading);font-size:15px;}
+  .sz-phase-wks{opacity:.85;font-size:12px;margin-top:2px;}
+  .sz-phase-dates{opacity:.75;font-size:11px;margin-top:2px;}
+  .sz-chips{display:flex;flex-wrap:wrap;gap:var(--space-xs);}
+  .sz-chip{background:var(--sf-light-bg);color:var(--sf-container);border:1px solid var(--sf-cloud-80);border-radius:999px;padding:4px 12px;font-size:13px;}
+  .sz-cta{display:inline-block;background:var(--sf-blue);color:#fff;font-family:var(--font-heading);text-decoration:none;padding:var(--space-sm) var(--space-lg);border-radius:999px;box-shadow:var(--shadow-brand);border:none;cursor:pointer;}
+  .sz-panorama{position:relative;padding:var(--space-2xl) var(--space-xl);text-align:center;border-radius:var(--radius-lg);box-shadow:var(--shadow-brand);overflow:hidden;}
+  .sz-panorama--navy{background:linear-gradient(135deg,var(--sf-navy),var(--sf-container));color:#fff;}
+  .sz-panorama h2{color:inherit;font-size:var(--fs-l1);}
+  .sz-panorama p{color:rgba(255,255,255,.8);margin-top:var(--space-sm);}
+  .shot-btn{position:absolute;top:14px;right:16px;font-size:11px;font-weight:600;color:var(--sf-blue);background:#fff;border:1px solid var(--sf-cloud-80);border-radius:5px;padding:4px 9px;cursor:pointer;z-index:2;}
+  .shot-btn:hover{background:var(--sf-light-bg);}
+  [data-shot]{background:#fff;position:relative;}
+  @media print{.shot-btn,.sz-export{display:none;}}
+  .sz-wrap{max-width:980px;margin:0 auto;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero{background:linear-gradient(135deg,var(--sf-container),var(--sf-blue));color:#fff;padding:var(--space-2xl) var(--space-lg);}
+  .sz-hero h1{color:#fff;font-size:var(--fs-subtitle);max-width:700px;}
+  .sz-hero p{color:var(--sf-cloud-80);margin-top:var(--space-sm);font-size:16px;}
+  .sz-cobrand{display:flex;align-items:center;gap:var(--space-md);margin-bottom:var(--space-lg);}
+  .sz-cobrand svg{height:30px;width:auto;}
+  .sz-cobrand-x{color:var(--sf-cloud-80);font-size:18px;}
+  .sz-sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:#fff;border-right:1px solid var(--sf-cloud-80);overflow-y:auto;z-index:200;display:flex;flex-direction:column;padding-bottom:var(--space-lg);transform:translateX(-100%);transition:transform .22s ease;box-shadow:4px 0 20px rgba(0,30,91,.12);}
+  .sz-sidebar.open{transform:translateX(0);}
+  .sz-sidebar-header{padding:var(--space-md) var(--space-md) var(--space-sm);display:flex;align-items:center;justify-content:space-between;font-family:var(--font-heading);font-size:13px;font-weight:700;color:var(--sf-navy);border-bottom:1px solid var(--sf-cloud-80);letter-spacing:.04em;}
+  .sz-sidebar-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--sf-text-weak);line-height:1;padding:0;}
+  .sz-sidebar-close:hover{color:var(--sf-navy);}
+  .sz-sidebar-group{padding:var(--space-sm) 0;border-bottom:1px solid var(--sf-light-bg);}
+  .sz-sidebar-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sf-text-weak);padding:var(--space-sm) var(--space-md) 4px;}
+  .sz-sidebar-link{display:block;padding:6px var(--space-md);font-size:13px;text-decoration:none;color:var(--sf-container);border-left:3px solid transparent;line-height:1.3;}
+  .sz-sidebar-link:hover{background:var(--sf-light-bg);color:var(--sf-navy);}
+  .sz-sidebar-link.active{background:var(--sf-light-bg);border-left-color:var(--client-primary);color:var(--sf-navy);font-weight:600;}
+  .sz-sidebar-footer{margin-top:auto;padding:var(--space-md);}
+  .sz-sources-btn{display:block;text-align:center;font-size:12px;font-weight:700;padding:5px 14px;border-radius:4px;background:var(--sf-blue);color:#fff !important;text-decoration:none !important;letter-spacing:.02em;}
+  .sz-sources-btn:hover{background:var(--sf-container);}
+  .sz-sidebar-toggle{display:flex;position:fixed;top:14px;left:14px;z-index:300;background:var(--sf-navy);color:#fff;border:none;border-radius:6px;width:36px;height:36px;font-size:18px;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,30,91,.25);}
+  .sz-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:199;}
+  .sz-overlay.active{display:block;}
+  .sz-export{text-align:center;margin:var(--space-2xl) 0 var(--space-lg);}
+  html{scroll-behavior:smooth;}
+  section{scroll-margin-top:16px;}
+  .sz-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-md);}
+  .sz-risk-row td:first-child{font-weight:600;}
+  .sz-legend{display:flex;flex-wrap:wrap;gap:var(--space-sm);margin-top:var(--space-md);align-items:center;font-size:13px;color:var(--sf-text-weak);}
+  .sz-divider{border:none;border-top:1px solid var(--sf-cloud-80);margin:var(--space-2xl) 0;}
+  @media(max-width:720px){.sz-grid-2{grid-template-columns:1fr;}.sz-timeline{flex-direction:column;}.sz-stats{grid-template-columns:repeat(2,1fr);}}
+</style>
+
+<style>
+  :root{--client-primary:#E35205;}
+  .sz-stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr));}
+  .sz-stat-num{white-space:nowrap;font-size:34px;}
+  .sz-tag--confirmed{background:var(--sf-ok-bg);color:var(--sf-ok);}
+  .sz-tag--conditional{background:var(--ext-violet-95);color:var(--ext-violet-30);}
+  .sz-note{font-size:13px;color:var(--sf-text-weak);margin:var(--space-sm) 0 var(--space-md);}
+  .sz-disclaimer{font-size:12px;font-style:italic;color:var(--sf-text-weak);border-left:3px solid var(--sf-cloud-80);padding:4px 12px;margin:var(--space-md) 0;}
+  .sz-banner{background:var(--sf-warn-bg);border-left:4px solid var(--sf-warn);padding:var(--space-sm) var(--space-md);border-radius:var(--radius-sm);font-size:13px;margin:var(--space-md) 0;}
+  .sz-lanes{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);}
+  .sz-lane{background:#fff;border-radius:var(--radius-md);padding:var(--space-lg);box-shadow:var(--shadow-brand);border-top:4px solid var(--sf-neutral);}
+  .sz-lane--anchor{border-top-color:var(--sf-ok);}
+  .sz-lane--aug{border-top-color:var(--sf-blue);}
+  .sz-lane--cond{border:2px dashed var(--ext-violet);border-top-width:4px;}
+  .sz-lane h3{font-size:18px;margin-bottom:4px;}
+  .sz-lane .big{font-family:var(--font-heading);font-size:30px;color:var(--sf-container);margin:var(--space-sm) 0 0;}
+  .sz-lane dl{font-size:13px;margin-top:var(--space-sm);}
+  .sz-lane dt{color:var(--sf-text-weak);margin-top:6px;}
+  .sz-lane dd{font-weight:600;margin:0;}
+  .num{text-align:right;white-space:nowrap;}
+  tr.sz-total td{font-weight:700;background:#DCEBFF!important;}
+  .g-wrap{background:#fff;border-radius:var(--radius-md);box-shadow:var(--shadow-brand);padding:var(--space-md);overflow-x:auto;}
+  .g-row{display:flex;align-items:center;min-height:28px;}
+  .g-lbl{flex:0 0 330px;font-size:12px;padding-right:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .g-track{position:relative;flex:1;height:22px;min-width:560px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/var(--cols,34) - 1px),var(--sf-light-bg) calc(100%/var(--cols,34) - 1px),var(--sf-light-bg) calc(100%/var(--cols,34)));}
+  .g-ticks{background:none;height:18px;}
+  .g-ticks span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--sf-text-weak);}
+  .g-bar{position:absolute;top:3px;height:16px;border-radius:3px;background:var(--sf-blue);color:#fff;font-size:10px;line-height:16px;text-align:center;overflow:hidden;}
+  .g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}
+  .g-bar--p2{background:var(--sf-container);}
+  .g-bar--p3{background:var(--sf-navy);}
+  .g-bar--p4{background:var(--client-primary);}
+  .g-bar--p5{background:var(--sf-ok);}
+  .g-bar--cond{opacity:.75;outline:2px dashed var(--ext-violet);outline-offset:1px;}
+  .g-legend{font-size:12px;color:var(--sf-text-weak);margin-top:8px;}
+  .g-key{display:inline-block;width:14px;height:10px;border-radius:2px;background:var(--sf-blue);margin:0 4px 0 12px;vertical-align:middle;}
+  .g-key.g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}.g-key.g-bar--p2{background:var(--sf-container);}.g-key.g-bar--p3{background:var(--sf-navy);}.g-key.g-bar--p4{background:var(--client-primary);}.g-key.g-bar--p5{background:var(--sf-ok);}
+  .c-seg:not([class*="g-bar--"]){background:var(--sf-blue);}
+  .c-seg.g-bar--mob{background:repeating-linear-gradient(45deg,var(--sf-text-weak) 0 4px,#8892AE 4px 8px);}.c-seg.g-bar--p2{background:var(--sf-container);}.c-seg.g-bar--p3{background:var(--sf-navy);}.c-seg.g-bar--p4{background:var(--client-primary);}.c-seg.g-bar--p5{background:var(--sf-ok);}
+  .c-row{display:flex;align-items:center;min-height:40px;}
+  .c-lbl{flex:0 0 240px;font-size:13px;font-weight:600;padding-right:8px;}
+  .c-tot{flex:0 0 70px;font-family:var(--font-heading);font-size:18px;color:var(--sf-container);text-align:right;}
+  .c-track{position:relative;flex:1;min-width:520px;height:28px;}
+  .c-ticks{height:18px;}
+  .c-ticks span{position:absolute;transform:translateX(-50%);font-size:10px;color:var(--sf-text-weak);}
+  .c-bar{display:flex;height:24px;margin-top:2px;border-radius:4px;overflow:hidden;}
+  .c-bar--cond{opacity:.75;outline:2px dashed var(--ext-violet);outline-offset:2px;}
+  .c-seg{height:100%;color:#fff;font-size:11px;line-height:24px;text-align:center;border-right:1px solid #fff;}
+  .c-gl{position:absolute;top:-2px;transform:translateX(-50%);color:#C79A00;font-size:20px;line-height:28px;text-shadow:0 0 2px #fff;}
+  .sz-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-md);margin-top:var(--space-md);}
+  .sz-card{background:#fff;border-radius:var(--radius-md);padding:var(--space-md);box-shadow:var(--shadow-brand);border-top:4px solid var(--sf-blue);font-size:13px;}
+  .sz-card h4{font-size:14px;margin-bottom:4px;}
+  .sz-filter button{font-size:12px;border:1px solid var(--sf-cloud-80);background:#fff;color:var(--sf-container);border-radius:999px;padding:3px 10px;margin:0 4px 6px 0;cursor:pointer;}
+  .sz-filter button.on{background:var(--sf-container);color:#fff;}
+  .sz-doc h1{font-size:26px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h2{font-size:20px;margin:var(--space-lg) 0 var(--space-sm);}
+  .sz-doc h3{font-size:16px;margin:var(--space-md) 0 var(--space-xs);}
+  .sz-doc p,.sz-doc li{font-size:14px;margin-bottom:6px;}
+  .sz-doc ul,.sz-doc ol{padding-left:22px;margin-bottom:var(--space-sm);}
+  .sz-doc table{width:100%;border-collapse:collapse;margin:var(--space-sm) 0 var(--space-md);font-size:13px;background:#fff;}
+  .sz-doc th{background:var(--sf-container);color:#fff;text-align:left;padding:6px 10px;}
+  .sz-doc td{padding:6px 10px;border-top:1px solid var(--sf-light-bg);vertical-align:top;}
+  .sz-doc blockquote{border-left:3px solid var(--sf-cloud-80);padding:4px 12px;color:var(--sf-text-weak);margin:var(--space-sm) 0;}
+  .sz-doc code{font-size:12px;background:var(--sf-light-bg);padding:1px 4px;border-radius:3px;}
+  .sz-topnav a{color:#fff;margin-right:var(--space-md);font-size:14px;}
+  @media(max-width:960px){.sz-lanes,.sz-cards{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="sz-hero">
+  <div class="sz-wrap" style="padding-top:0;padding-bottom:0;">
+    <div class="sz-cobrand"><svg role="img" aria-label="Salesforce" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 205.735 144"><g><path fill-rule="nonzero" fill="rgb(17.7%,62%,87.5%)" d="M85.5 15.8C92.1 8.9 101.4 4.6 111.6 4.6c13.6 0 25.4 7.6 31.7 18.8 5.5-2.4 11.6-3.8 17.9-3.8 24.5 0 44.3 20 44.3 44.7s-19.8 44.7-44.3 44.7c-3 0-5.9-.3-8.7-.9-5.5 9.9-16.1 16.6-28.2 16.6-5.1 0-9.9-1.2-14.2-3.3C104.4 134.6 91.3 143.9 76 143.9c-15.3 0-29.5-10.1-34.7-24.2-2.3.5-4.6.7-7 .7C15.4 120.5 0 105 0 85.8c0-12.8 6.9-24 17.1-30-2.1-4.9-3.2-10.2-3.2-15.9C13.9 17.9 31.7.1 53.8.1c12.9 0 24.4 6.1 31.7 15.7"/></g><path fill="#fff" d="M29.8 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM91.5 74.7c-.1.3.1.4.1.4.4.3.8.5 1.2.7 2.1 1.1 4.1 1.4 6.1 1.4 4.2 0 6.8-2.2 6.8-5.8v-.1c0-3.3-2.9-4.6-5.7-5.4l-.4-.1c-2.1-.7-3.9-1.3-3.9-2.6v-.1c0-1.2 1.1-2.1 2.7-2.1 1.8 0 4 .6 5.4 1.4 0 0 .4.3.5-.1.1-.2.8-2.1.8-2.3.1-.2 0-.4-.1-.5-1.6-1-3.8-1.6-6-1.6h-.4c-3.9 0-6.5 2.3-6.5 5.7v.1c0 3.5 3 4.6 5.8 5.4l.4.1c2 .6 3.8 1.1 3.8 2.6v.1c0 1.3-1.1 2.3-2.9 2.3-.7 0-3-.1-5.4-1.6-.3-.2-.5-.3-.7-.4-.1-.1-.4-.2-.5.2l-.8 2.3zM133.6 67.6c0 2-.4 3.6-1.1 4.8-.7 1.1-1.9 1.7-3.5 1.7s-2.7-.5-3.4-1.7c-.7-1.1-1.1-2.8-1.1-4.8s.4-3.6 1.1-4.8c.7-1.1 1.9-1.7 3.4-1.7s1.7.5 2.5 1.7c.7 1.1 1.1 2.8 1.1 4.8m3.5-3.8c-.3-1.2-.9-2.2-1.6-3.1-.7-.9-1.6-1.6-2.7-2.1-1.1-.5-2.3-.8-3.7-.8s-2.7.3-3.8.8c-1.1.5-2 1.2-2.7 2.1-.7.9-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.3 1.2.9 2.2 1.6 3.1.7.9 1.6 1.6 2.7 2.1 1.1.5 2.3.8 3.8.8s2.7-.3 3.7-.8c1.1-.5 2-1.2 2.7-2.1.7-.9 1.2-1.9 1.6-3.1.3-1.2.5-2.4.5-3.8s-.2-2.6-.5-3.8M166 73.5c-.1-.3-.5-.2-.5-.2-.5.2-1.1.4-1.6.5-.6.1-1.2.1-1.9.1-1.7 0-3.1-.5-4.1-1.5-1-.9-1.5-2.6-1.5-4.8 0-2 .5-3.5 1.4-4.6.9-1.1 2.2-1.7 3.9-1.7 1.4 0 2.5.2 3.7.6 0 0 .3.1.4-.3.3-.9.5-1.5.8-2.4.1-.3-.1-.4-.2-.4-.5-.2-1.5-.5-2.4-.6-.8-.1-1.6-.2-2.6-.2-1.5 0-2.8.2-3.9.7-1.1.5-2.1 1.2-2.8 2-.8.9-1.3 1.9-1.7 3.1-.4 1.2-.6 2.4-.6 3.8 0 2.9.8 5.3 2.3 7 1.6 1.7 3.9 2.6 7 2.6 1.8 0 3.6-.4 4.9-.9 0 0 .3-.1.2-.4L166 73.5zM172.2 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-.9-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2.9 2.2 1.7 3 .8.9 1.8 1.5 3 2 1.2.4 2.6.7 4.3.7 3.4 0 5.3-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9H184s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M76.8 65.7c.2-1.1.5-2.1 1-2.8.7-1.1 1.8-1.7 3.3-1.7s2.3.6 3.1 1.7c.5.7.7 1.7.8 2.8h-8.2zm11.8-2.5c-.3-1.1-1-2.3-1.5-2.8-.8-.8-1.5-1.4-2.3-1.7-1-.4-2.1-.7-3.3-.7-1.5 0-2.8.3-3.9.8-1.1.5-2 1.2-2.7 2.1-.7.8-1.2 1.9-1.6 3.1-.3 1.2-.5 2.4-.5 3.8s.2 2.6.5 3.8c.4 1.2 1 2.2 1.7 3 .8.9 1.7 1.5 2.9 2 1.2.4 2.6.7 4.3.7 3.4 0 5.2-.8 6-.2.1-.1.2-.2.1-.5l-.8-2.2c-.1-.3-.4-.2-.4-.2-.9.3-2.1.9-4.9.9-1.8 0-3.2-.5-4.1-1.5-.9-.8-1.3-2.1-1.4-3.9h11.9s.3 0 .3-.3c.1-.1.5-2.4-.3-5.1z"/><path fill="#fff" d="M51 73.4c-.5-.4-.5-.5-.6-.7-.2-.4-.3-.9-.3-1.6 0-1 .3-1.8 1.1-2.3 0 0 1-.9 3.4-.9 1.7 0 3.3.3 3.3.3v5.4s-1.5.3-3.2.4c-2.4.1-3.5-.6-3.5-.6zm4.8-8.3c-.5 0-1.1-.1-1.9-.1-.9 0-1.9.1-2.8.4-.9.2-1.7.6-2.4 1.1-.7.5-1.3 1.2-1.7 2-.4.8-.6 1.7-.6 2.8s.2 2 .5 2.7c.4.8.9 1.4 1.6 1.9.7.5 1.5.8 2.4 1 1 .2 2 .3 3.2.3 1.2 0 2.4-.1 3.6-.3 1.2-.2 2.6-.5 2.9-.6.4-.1.8-.2.8-.2.3-.1.3-.4.3-.4V64.8c0-2.4-.7-4.1-1.9-5.2-1.3-1.1-3.1-1.6-5.5-1.6-.9 0-2.3.1-3.1.3 0 0-2.6.5-3.7 1.3 0 0-.2.1-.1.5l.8 2.3c.1.3.4.2.4.2s.1 0 .2-.1c2.3-1.2 5.2-1.2 5.2-1.2 1.3 0 2.3.3 2.9.8.6.5 1 1.2 1 2.8v.5c-1-.2-1.9-.2-1.9-.2z"/><path fill="#fff" d="M151.8 58.9c.1-.3-.1-.4-.1-.4-.2-.1-1.2-.3-2-.4-1.5-.1-2.3.1-3.1.5-.7.3-1.6.9-2 1.5V58.7c0-.2-.2-.4-.4-.4h-3v17.8c0 .2.2.4.4.4h3.2c.2 0 .4-.2.4-.4V67.6c0-1.2.1-2.4.4-3.1.2-.7.6-1.3 1-1.7.4-.4.9-.7 1.4-.9.5-.2 1.1-.2 1.5-.2.6 0 1.3.2 1.3.2.2 0 .4-.1.5-.4l1.5-3.6zM122.5 50.7c-.4-.1-.7-.2-1.2-.3-.5-.1-1-.1-1.6-.1-2.1 0-3.9.6-5 1.8-1.2 1.2-2 3-2.4 5.4l-.1.8h-2.7c0 0-.3 0-.4.4l-.4 2.5c0 .2.1.4.4.4h2.6L109 76.4c-.2 1.2-.5 2.2-.7 2.9-.3.8-.5 1.3-.8 1.7-.3.4-.6.7-1 .8-.4.1-.9.2-1.4.2-.3 0-.6 0-.9-.1-.3-.1-.4-.1-.6-.2 0 0-.3-.1-.4.2l-.9 2.4c-.1.2 0 .4.1.5.4.1.6.2 1.1.3.6.2 1.2.2 1.7.2 1.1 0 2.1-.2 2.9-.5.8-.3 1.6-.8 2.2-1.6.7-.8 1.1-1.5 1.5-2.6.4-1 .7-2.4 1-4l2.7-15.1h3.9c0 0 .3 0 .4-.4l.4-2.5c0-.2-.1-.4-.4-.4h-3.8c0-.1.2-1.4.6-2.7.2-.5.5-1 .8-1.3.3-.3.6-.5 1-.6.4-.1.8-.2 1.3-.2.4 0 .7.1 1 .1.4.1.5.1.6.1.4.1.5 0 .5-.2l.9-2.5c.1-.3-.1-.4-.2-.5z"/><path fill="#fff" d="M69.3 76.5c0 .2-.2.4-.4.4h-3.2c-.2 0-.4-.2-.4-.4V51h3.6c.2 0 .4.2.4.4v25.1z"/></svg><span class="sz-cobrand-x">×</span>
+      <span style="font-family:var(--font-heading);font-size:22px;color:#fff;letter-spacing:0.04em;">PCNA</span></div>
+    <h1>Service Cloud and Agentforce with Vonage</h1>
+    <p>Five9 to Vonage, Casey on phone and web chat, Knowledge and CSR AI · scope and delivery approach</p>
+    <p class="sz-topnav" style="margin-top:var(--space-md);"><a href="index.html">Overview</a><a href="scope.html">Full scope</a><a href="docs.html">Documents</a></p>
+  </div>
+</header>
+<button class="sz-sidebar-toggle" aria-label="Open navigation" onclick="document.querySelector('.sz-sidebar').classList.add('open');document.getElementById('sz-overlay').classList.add('active');">&#9776;</button>
+<div class="sz-overlay" id="sz-overlay" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');"></div>
+<nav class="sz-sidebar" aria-label="Section navigation">
+  <div class="sz-sidebar-header"><span>PCNA · Service Cloud</span>
+    <button class="sz-sidebar-close" aria-label="Close navigation" onclick="document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');">&#215;</button></div>
+  <div class="sz-sidebar-group"><div class="sz-sidebar-label">Overview</div><a href="#summary" class="sz-sidebar-link">Summary</a><a href="#phases" class="sz-sidebar-link">Plan</a><a href="#models" class="sz-sidebar-link">Delivery models</a><a href="#decisions" class="sz-sidebar-link">Design decision</a><a href="#risks" class="sz-sidebar-link">Risks</a><a href="#next" class="sz-sidebar-link">Next steps</a></div><div class="sz-sidebar-group"><div class="sz-sidebar-label">More</div><a href="scope.html" class="sz-sidebar-link">Full scope</a><a href="docs.html" class="sz-sidebar-link">Documents</a></div>
+</nav>
+<main class="sz-wrap">
+<section id="summary" class="sz-section"><div class="sz-section-eyebrow">Overview</div><h2 class="sz-section-title">Vonage replaces Five9, and Casey replaces Clara.</h2><p>PCNA is replacing Five9 with Vonage as its contact-center platform, and its current AI agent, Clara, is being retired. This program uses that switch to put Casey, a Salesforce AI agent, on phone and web chat. Casey answers from a new Knowledge base, tells customers where their order is, and hands off to a CSR with the full context. The 100 CSRs work from one Service Cloud console with AI assistance, and case teams are organized by territory pod. Everything here is a working assumption from PCNA&#x27;s reverse demo until PCNA answers the shared scoping questions.</p><div class="sz-stats"><div class="sz-stat"><div class="sz-stat-num">12</div><div class="sz-stat-lbl">Epics</div></div><div class="sz-stat"><div class="sz-stat-num">34</div><div class="sz-stat-lbl">Weeks · standard (planned)</div></div><div class="sz-stat"><div class="sz-stat-num">29</div><div class="sz-stat-lbl">Weeks · AI-assisted</div></div><div class="sz-stat"><div class="sz-stat-num">26</div><div class="sz-stat-lbl">Weeks · AI-native (conditional)</div></div><div class="sz-stat"><div class="sz-stat-num">114</div><div class="sz-stat-lbl">Open questions and assumptions</div></div></div><div class="sz-chips"><span class="sz-chip">Existing Service Cloud org</span><span class="sz-chip">Vonage replaces Five9</span><span class="sz-chip">Salesforce Voice partner telephony</span><span class="sz-chip">Casey AI agent on phone and web chat</span><span class="sz-chip">&quot;Where is my order?&quot; across 3 order systems</span><span class="sz-chip">Parent/child cases and case teams</span><span class="sz-chip">New Knowledge base</span><span class="sz-chip">AI grounded on Knowledge</span><span class="sz-chip">CSR productivity AI for 100 CSRs</span><span class="sz-chip">Outlook escalation emails on the case</span><span class="sz-chip">Single go-live on the Vonage cutover</span></div></section><section id="phases" class="sz-section"><div class="sz-section-eyebrow">Plan</div><h2 class="sz-section-title">The program runs 34 weeks in six phases, with one go-live on the Vonage cutover.</h2><div class="sz-timeline"><div class="sz-phase" style="background:var(--sf-text-weak);"><div class="sz-phase-name">Phase 0 · Mobilization and Integration Design</div><div class="sz-phase-wks">Wk 1–3</div></div><div class="sz-phase" style="background:var(--sf-blue);"><div class="sz-phase-name">Phase 1 · Foundations: Telephony, Orders and Knowledge</div><div class="sz-phase-wks">Wk 4–13</div></div><div class="sz-phase" style="background:var(--sf-container);"><div class="sz-phase-name">Phase 2 · Casey Agent and AI Grounding</div><div class="sz-phase-wks">Wk 14–20</div></div><div class="sz-phase" style="background:var(--sf-navy);"><div class="sz-phase-name">Phase 3 · Channels and CSR Productivity AI</div><div class="sz-phase-wks">Wk 21–28</div></div><div class="sz-phase" style="background:var(--client-primary);"><div class="sz-phase-name">Phase 4 · Stabilization and Cutover</div><div class="sz-phase-wks">Wk 29–32</div></div><div class="sz-phase" style="background:var(--sf-ok);"><div class="sz-phase-name">Phase 5 · Hypercare</div><div class="sz-phase-wks">Wk 33–34</div></div></div><p class="sz-note">Standard delivery: 32 weeks to go-live, then 2 weeks of hypercare.</p><p class="sz-disclaimer">This figure is benchmark-based, derived from the AI model&#x27;s training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</p></section><section id="models" class="sz-section"><div class="sz-section-eyebrow">Delivery models</div><h2 class="sz-section-title">The same scope delivers in 26 to 34 weeks, depending on the delivery model.</h2><div class="g-wrap"><div class="c-row"><div class="c-lbl"></div><div class="c-track c-ticks"><span style="left:0.000%">0</span><span style="left:5.882%">2</span><span style="left:11.765%">4</span><span style="left:17.647%">6</span><span style="left:23.529%">8</span><span style="left:29.412%">10</span><span style="left:35.294%">12</span><span style="left:41.176%">14</span><span style="left:47.059%">16</span><span style="left:52.941%">18</span><span style="left:58.824%">20</span><span style="left:64.706%">22</span><span style="left:70.588%">24</span><span style="left:76.471%">26</span><span style="left:82.353%">28</span><span style="left:88.235%">30</span><span style="left:94.118%">32</span><span style="left:100.000%">34</span></div><div class="c-tot"></div></div><div class="c-row"><div class="c-lbl">Standard delivery</div><div class="c-track"><div class="c-bar"><div class="c-seg g-bar--mob" style="width:8.824%" title="Phase 0: 3 weeks">P0</div><div class="c-seg " style="width:29.412%" title="Phase 1: 10 weeks">P1</div><div class="c-seg g-bar--p2" style="width:20.588%" title="Phase 2: 7 weeks">P2</div><div class="c-seg g-bar--p3" style="width:23.529%" title="Phase 3: 8 weeks">P3</div><div class="c-seg g-bar--p4" style="width:11.765%" title="Phase 4: 4 weeks">P4</div><div class="c-seg g-bar--p5" style="width:5.882%" title="Phase 5: 2 weeks">P5</div></div><div class="c-gl" style="left:94.118%" title="Go-live, end of week 32">◆</div></div><div class="c-tot">34 wk</div></div><div class="c-row"><div class="c-lbl">AI-assisted delivery</div><div class="c-track"><div class="c-bar"><div class="c-seg g-bar--mob" style="width:8.824%" title="Phase 0: 3 weeks">P0</div><div class="c-seg " style="width:23.529%" title="Phase 1: 8 weeks">P1</div><div class="c-seg g-bar--p2" style="width:17.647%" title="Phase 2: 6 weeks">P2</div><div class="c-seg g-bar--p3" style="width:17.647%" title="Phase 3: 6 weeks">P3</div><div class="c-seg g-bar--p4" style="width:11.765%" title="Phase 4: 4 weeks">P4</div><div class="c-seg g-bar--p5" style="width:5.882%" title="Phase 5: 2 weeks">P5</div></div><div class="c-gl" style="left:79.412%" title="Go-live, end of week 27">◆</div></div><div class="c-tot">29 wk</div></div><div class="c-row"><div class="c-lbl">AI-native delivery (conditional)</div><div class="c-track"><div class="c-bar c-bar--cond"><div class="c-seg g-bar--mob" style="width:8.824%" title="Phase 0: 3 weeks">P0</div><div class="c-seg " style="width:20.588%" title="Phase 1: 7 weeks">P1</div><div class="c-seg g-bar--p2" style="width:14.706%" title="Phase 2: 5 weeks">P2</div><div class="c-seg g-bar--p3" style="width:14.706%" title="Phase 3: 5 weeks">P3</div><div class="c-seg g-bar--p4" style="width:11.765%" title="Phase 4: 4 weeks">P4</div><div class="c-seg g-bar--p5" style="width:5.882%" title="Phase 5: 2 weeks">P5</div></div><div class="c-gl" style="left:70.588%" title="Go-live, end of week 24">◆</div></div><div class="c-tot">26 wk</div></div><p class="g-legend">◆ Go-live (aligned to the Vonage cutover) · dashed outline = conditional</p></div><div class="sz-cards"><div class="sz-card" style="border-top-color:var(--sf-text-weak)"><h4>P0 · Mobilization and Integration Design</h4><p>Name the order systems and confirm API access. Complete the joint design with Vonage and set the cutover date.</p></div><div class="sz-card" style="border-top-color:var(--sf-blue)"><h4>P1 · Foundations: Telephony, Orders and Knowledge</h4><p>Connect Vonage to Salesforce. Build order lookup across all three systems. Set up the Knowledge base and case teams.</p></div><div class="sz-card" style="border-top-color:var(--sf-container)"><h4>P2 · Casey Agent and AI Grounding</h4><p>Build Casey: case handling, Knowledge answers, identity checks, order status and handoff to a CSR. Ground the AI on Knowledge and connect Outlook.</p></div><div class="sz-card" style="border-top-color:var(--sf-navy)"><h4>P3 · Channels and CSR Productivity AI</h4><p>Put Casey on phone and web chat. Launch web-to-case. Pilot the CSR AI features with CSRs.</p></div><div class="sz-card" style="border-top-color:var(--client-primary)"><h4>P4 · Stabilization and Cutover</h4><p>End-to-end testing with PCNA users and Vonage. Go live on the Vonage cutover date and hand over to PCNA admins.</p></div><div class="sz-card" style="border-top-color:var(--sf-ok)"><h4>P5 · Hypercare</h4><p>Two weeks of production support, fixing issues and tuning Casey on real conversations.</p></div></div><div style="margin-top:var(--space-lg)"></div><div class="sz-lanes"><div class="sz-lane sz-lane--anchor"><h3>Standard delivery</h3><span class="sz-tag sz-tag--confirmed">The plan</span><div class="big">34 weeks</div><dl><dt>Go-live</dt><dd>End of week 32, then 2 weeks of hypercare</dd><dt>Phase weeks, 0 to 5</dt><dd>3/10/7/8/4/2</dd><dt>How it works</dt><dd>Standard delivery methods and tooling</dd><dt>What it needs from PCNA</dt><dd>The shared scoping answers and named PCNA owners</dd><dt>Team shape</dt><dd>9 people · senior onshore architecture core with a dedicated Agentforce architect, onshore integration developer, offshore build and test</dd><dt>Professional services hours</dt><dd>10,440</dd></dl></div><div class="sz-lane sz-lane--aug"><h3>AI-assisted delivery</h3><span class="sz-tag sz-tag--info">Requires AI tooling approval</span><div class="big">29 weeks</div><dl><dt>Go-live</dt><dd>End of week 27, then 2 weeks of hypercare</dd><dt>Phase weeks, 0 to 5</dt><dd>3/8/6/6/4/2</dd><dt>How it works</dt><dd>Same method, with AI tooling for design, build, test and documentation (~10–21% efficiency, Mid readiness)</dd><dt>What it needs from PCNA</dt><dd>Approval of Salesforce AI development tools in PCNA sandboxes</dd><dt>Team shape</dt><dd>9 people · same team as standard</dd></dl></div><div class="sz-lane sz-lane--cond"><h3>AI-native delivery (conditional)</h3><span class="sz-tag sz-tag--conditional">Conditional</span><div class="big">26 weeks</div><dl><dt>Go-live</dt><dd>End of week 24, then 2 weeks of hypercare</dd><dt>Phase weeks, 0 to 5</dt><dd>3/7/5/5/4/2</dd><dt>How it works</dt><dd>Short daily build, demo and decide cycles with PCNA (~20–29% band, provisional)</dd><dt>What it needs from PCNA</dt><dd>An empowered product owner, daily build-and-review cycles, an executive mandate, and AI tools approved on PCNA data</dd><dt>Team shape</dt><dd>9 people · similar size; one agent-assisted consultant replaces the onshore and offshore pair; independent QA retained</dd></dl></div></div><p class="sz-note">Phase 0, cutover and hypercare stay the same length in every delivery model: PCNA and Vonage set their pace, and go-live aligns to the Vonage cutover date. The faster models reach go-live sooner with a team of similar size.</p><div class="sz-banner"><b>AI-native is conditional.</b> It holds only if PCNA commits to the way of working: an empowered product owner who decides quickly, daily build-and-review cycles, an executive mandate for the approach, and approval of AI tools on PCNA data and environments. None is confirmed today.</div><p class="sz-disclaimer">This figure is benchmark-based, derived from the AI model&#x27;s training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</p></section><section id="decisions" class="sz-section"><div class="sz-section-eyebrow">Architecture</div><h2 class="sz-section-title">One design decision shapes the whole scope.</h2><table class="sz-table"><thead><tr><th>Decision</th><th>Status</th></tr></thead><tbody><tr><td>0001 — Vonage replaces Five9 and connects through Salesforce partner telephony; Casey takes voice calls over SIP</td><td>accepted (ratified 2026-10-13)</td></tr></tbody></table></section><section id="risks" class="sz-section"><div class="sz-section-eyebrow">Risks</div><h2 class="sz-section-title">The Vonage date and the order systems carry the most schedule risk.</h2><table class="sz-table"><thead><tr><th>Risk</th><th>Mitigation</th></tr></thead><tbody><tr><td>Go-live depends on the Vonage cutover date</td><td>Fix the cutover date in Phase 0 and run one joint plan across all three parties</td></tr><tr><td>An order system lacks a usable API</td><td>Name the systems and confirm API access in Phase 0, before the build starts</td></tr><tr><td>Vonage is not a supported SIP partner</td><td>Get written confirmation from Vonage in Phase 0</td></tr><tr><td>Knowledge content is late or thin</td><td>Name authors and inventory the policy files in Phase 0; start content in Phase 1</td></tr><tr><td>CSR status out of sync between Vonage and Salesforce</td><td>Settle the availability design with Vonage in Phase 0</td></tr><tr><td>PCNA roles unstaffed</td><td>Name the product owner, sponsor, and change and training owner at kickoff</td></tr></tbody></table></section><section id="next" class="sz-section"><div class="sz-section-eyebrow">Next steps</div><h2 class="sz-section-title">Four actions start Phase 0.</h2><ol class='sz-doc'><li>Answer the priority questions: the two further order systems and their APIs, the Vonage cutover date and SIP-partner confirmation, the Knowledge inventory and authors.</li><li>Name PCNA's product owner, sponsor, and change and training owner.</li><li>Choose a delivery model.</li><li>Confirm the Phase 0 start; pricing follows.</li></ol></section>
+<hr class="sz-divider">
+<p class="sz-note">Prepared by Salesforce Professional Services · October 2026 · Draft for discussion · Pricing not included.</p>
+</main>
+<script>
+document.querySelectorAll('.sz-sidebar-link').forEach(function(a){a.addEventListener('click',function(){document.querySelector('.sz-sidebar').classList.remove('open');document.getElementById('sz-overlay').classList.remove('active');});});
+document.querySelectorAll('.sz-filter').forEach(function(f){
+  var tbl=document.getElementById(f.dataset.table);
+  f.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){
+    f.querySelectorAll('button').forEach(function(x){x.classList.remove('on');});b.classList.add('on');
+    tbl.querySelectorAll('tbody tr').forEach(function(tr){tr.style.display=(b.dataset.cat==='all'||tr.dataset.cat===b.dataset.cat)?'':'none';});
+  });});
+});
+</script>
+</body>
+</html>
