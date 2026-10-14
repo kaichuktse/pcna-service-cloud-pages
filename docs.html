@@ -303,13 +303,13 @@
 <td>Vonage connected in test; order lookup live from all three systems; first articles published; case teams in test</td>
 </tr>
 <tr>
-<td>2. Casey Agent and AI Grounding</td>
-<td>7</td>
-<td>Casey passes conversation testing; grounding accepted; Outlook live</td>
+<td>2. Casey Handover and AI Grounding</td>
+<td>6</td>
+<td>Casey taken over from the proof of concept, promoted to production, and "where is my order?" added; regression testing and grounding accepted; Outlook live</td>
 </tr>
 <tr>
 <td>3. Channels and CSR Productivity AI</td>
-<td>8</td>
+<td>9</td>
 <td>Casey on voice and chat with handoff to CSRs; pilot CSRs accept the AI features</td>
 </tr>
 <tr>
@@ -355,7 +355,7 @@
 <p><em>This figure is benchmark-based, derived from the AI model's training data and general delivery patterns (not Salesforce-validated) — not a commitment. Final figures are confirmed through the applicable commercial agreement.</em></p>
 <h2>Effort Summary</h2>
 <ul>
-<li><strong>Complexity:</strong> of the twelve work areas, three are large (Casey, order lookup and CSR productivity AI), seven medium and two small.</li>
+<li><strong>Complexity:</strong> of the twelve work areas, two are large (order lookup and CSR productivity AI), seven medium and three small. Casey's standard agent is being built and tested by a Salesforce team as a proof of concept before this project starts. This project takes it over, adds the order subtopic and runs regression testing.</li>
 <li><strong>Salesforce team:</strong> a senior Solution Architect and a dedicated Agentforce Technical Architect lead, with a project manager, an onshore integration developer for the order systems, and offshore configuration, development and testing.</li>
 <li><strong>PCNA team:</strong> a product owner, a sponsor, CSR and supervisor experts, IT support for the order-system APIs, Knowledge authors, UAT testers, and a change and training owner. None of these roles is named yet.</li>
 </ul>
@@ -495,18 +495,19 @@
 - <strong>Escalation.</strong> The call returns to Vonage by SIP transfer, with custom SIP headers carrying the reason and summary. Vonage creates the first call record and passes its ID, so Casey's and the CSR's call records stay linked. How Vonage handles its side of this is  (G0401, G0403).
 - <strong>SIP partner status is assumed (G0002).</strong> If Vonage confirms otherwise, the only option is Dynamic Routing, which can't record voice calls. That would reopen ADR 0001 and make E04 an L.
 - <strong>Voice design.</strong> Voice turns are short and tolerate interruption. Order-system calls must answer within the voice response budget (G0605).</p>
-<h3>E03 — Casey: Agentforce Service Agent</h3>
-<p><strong>Business context:</strong> Clara, PCNA's current AI agent, is retiring. The Salesforce team has started a Casey proof of concept in a sandbox.</p>
+<h3>E03 — Casey: Handover, Order Subtopic and Production Readiness</h3>
+<p><strong>Business context:</strong> Clara, PCNA's current AI agent, is retiring. The Salesforce team is building and testing Casey, the out-of-the-box Agentforce Service Agent, as a proof of concept in a sandbox. We assume it is complete and tested before PS starts (G0021).</p>
 <p><strong>Solution approach:</strong>
-- <strong>Build.</strong> Rebuild Casey in PCNA's pipeline, using the POC as the design starting point.
-- <strong>Standard actions:</strong> create a case, update a case, check case status, answer from Knowledge, verify identity, transfer to a CSR.
-- <strong>Custom subtopics</strong> such as "Where is my order?".</p>
+- <strong>Built by a Salesforce team, not PS:</strong> the standard actions. These are create a case, update a case, check case status, answer from Knowledge, verify identity and transfer to a CSR.
+- <strong>Handover and promotion (PS).</strong> Accept the handover, put Casey's metadata under source control and promote it to production through PCNA's pipeline.
+- <strong>"Where is my order?" subtopic (PS).</strong> Added after the handover, on the E06 order action.
+- <strong>Regression testing (PS).</strong> Covers the handed-over actions and the new subtopic, and is repeated once Casey is on voice and chat.</p>
 <p><strong>Supporting architecture:</strong>
 - <strong>One agent, two channels.</strong> Voice and web chat are separate connections on the same agent, each with its own inbound and outbound Omni-Channel flows and a shared escalation subagent.
 - <strong>Actions.</strong> Deterministic Flow or Apex actions for case work and order lookup; prompt-based answers only for Knowledge. Each action is small and has defined inputs and outputs.
 - <strong>Identity verification.</strong> A verified tier controls access to orders and cases (for example email one-time code, or account number plus a second factor). The method is PCNA's call (G0301).
 - <strong>Guardrails.</strong> Casey hands off on pricing, credit, pre-sales, inside sales and anything it can't commit to (G0305). A test set and pass criteria are agreed before testing starts (G0307).
-- <strong>POC reuse.</strong> The level of reuse is an assumption until Phase 0 reviews the POC. Grounding libraries from the sandbox must be rebuilt (G0011, G0308).</p>
+- <strong>POC promotion.</strong> We assume PS promotes the POC as built, without rebuilding it. Phase 0 confirms its metadata and source-control state. Grounding libraries from the sandbox must be rebuilt in each environment (G0011, G0308, G0021).</p>
 <h3>E06 — Order Lookup Integration</h3>
 <p><strong>Business context:</strong> Most service contacts are order questions. Order data lives in FDM4 and two other, unnamed order systems.</p>
 <p><strong>Solution approach:</strong> Casey answers "Where is my order?" through live, read-only lookups: it finds the customer's order and reports its status. <strong>Casey does not create orders</strong> (working assumption, 2026-10-13; G0102 resolved).</p>
@@ -599,7 +600,7 @@
 <p><strong>Solution approach:</strong>
 - <strong>Order systems.</strong> Design the FDM4 and other order-system interfaces.
 - <strong>Vonage.</strong> Run the joint design for the SIP trunk, routing, availability and queue sync.
-- <strong>Casey.</strong> Assess the POC for reuse and lock the subtopic list.
+- <strong>Casey.</strong> Confirm the proof-of-concept handover date and what it includes, check the POC can be promoted, and lock the order subtopic's design.
 - <strong>Knowledge.</strong> Lock the content scope.
 - <strong>Org.</strong> Inventory the current org.</p>
 <p><strong>Exit criteria and PCNA sign-off owners are defined at kickoff (G0101).</strong> The biggest output of Phase 0 is resizing E03, E04, E06 and E10 against real answers.</p>
@@ -641,11 +642,11 @@
 <td>L if Vonage can't sync queues the standard way</td>
 </tr>
 <tr>
-<td>E03 Casey agent</td>
-<td>L</td>
+<td>E03 Casey handover and order subtopic</td>
+<td>S</td>
 <td>Assumed</td>
-<td>WISMO plus other subtopics, identity verification, guardrails, testing and tuning</td>
-<td>XL if more than ~5 custom subtopics</td>
+<td>proof-of-concept handover, promotion to production, WISMO subtopic, regression testing</td>
+<td>M if the POC needs rework to promote; L if PS has to build Casey</td>
 </tr>
 <tr>
 <td>E04 Casey voice</td>
@@ -722,10 +723,11 @@
   - Activity Capture linking emails to a Case automatically.
   - The health of the existing org.</p>
 <p>Anything that depends on Vonage's own behavior is  until Vonage provides documentation. That covers SIP partner status, queue sync, the voice handback, the supervisor embed and the live transcript.</p></div></section><section id="delivery" class="sz-section"><div class="sz-section-eyebrow">Document</div><h2 class="sz-section-title">Delivery plan</h2><div class="sz-doc"><h1>PCNA Service Cloud 2026: Delivery Plan</h1>
-<p><strong>Date:</strong> 2026-10-13 · <strong>Status:</strong> Draft. Scope assumptions are open until PCNA answers the shared questions.</p>
+<p><strong>Date:</strong> 2026-10-14 · <strong>Status:</strong> Draft. Scope assumptions are open until PCNA answers the shared questions.</p>
 <p><strong>Total program duration: 34 weeks (per user commitment):</strong> 32 weeks to go-live plus 2 weeks of hypercare. There is one go-live, aligned to the Vonage cutover.</p>
-<p>The plan runs in six phases. Phase 0 settles the order-system and Vonage design. Phase 1 builds the foundations Casey needs: telephony, order lookup and Knowledge. Phase 2 builds Casey and its grounding. Phase 3 puts Casey on voice and web chat and turns on the CSR AI features. Phase 4 runs UAT and cutover. Phase 5 is two weeks of post-go-live hypercare. PCNA runs change management and trains its 100 CSRs; Salesforce PS provides knowledge transfer and admin documentation.</p>
-<p><strong>Critical path:</strong> E01 Phase 0 → E06 Order Lookup → E03 Casey → E04 Casey Voice → E12 Cutover. A slip in the order-system design or the Casey build moves the go-live.</p>
+<p>The plan runs in six phases. Phase 0 settles the order-system and Vonage design. Phase 1 builds the foundations Casey needs: telephony, order lookup and Knowledge. Phase 2 takes over Casey from the Salesforce team, adds the order subtopic, and builds the grounding. Phase 3 puts Casey on voice and web chat and turns on the CSR AI features. Phase 4 runs UAT and cutover. Phase 5 is two weeks of post-go-live hypercare. PCNA runs change management and trains its 100 CSRs; Salesforce PS provides knowledge transfer and admin documentation.</p>
+<p><strong>Critical path:</strong> E01 Phase 0 → E06 Order Lookup → E03 Casey handover and order subtopic → E04 Casey Voice → E12 Cutover. A slip in the order-system design, or a Casey proof-of-concept handover that isn't ready when PS starts, moves the go-live.</p>
+<p><strong>Casey assumption (G0021):</strong> the Salesforce team builds and tests Casey, the out-of-the-box Agentforce Service Agent (case actions, Knowledge answers, identity verification, transfer to a CSR), as a sandbox POC before PS starts. PS doesn't build that agent. PS takes over the handover, promotes Casey to production, adds the "Where is my order?" subtopic and runs regression testing.</p>
 <h2>Phases</h2>
 <h3>Phase 0: Mobilization and Integration Design (3 weeks)</h3>
 <p><strong>Epics:</strong> E01
@@ -750,17 +752,18 @@
   - The order action returns live results from all three systems.
   - The first articles are published through the approval process.
   - Case teams are live in testing.</p>
-<h3>Phase 2: Casey Agent and AI Grounding (7 weeks)</h3>
-<p><strong>Epics:</strong> E03 Casey · E09 AI Grounding · E11 Outlook · <em>depends on: E06, E08</em>
+<h3>Phase 2: Casey Handover and AI Grounding (6 weeks)</h3>
+<p><strong>Epics:</strong> E03 Casey handover · E09 AI Grounding · E11 Outlook · <em>depends on: E06, E08, Casey proof-of-concept handover</em>
 - <strong>Goal:</strong>
-  - Build Casey: case actions, Knowledge answers, identity verification, transfer to a CSR, and the "Where is my order?" subtopic.
+  - Accept the Casey proof-of-concept handover and promote it from the sandbox to production. Data libraries can't be deployed from a sandbox, so each environment gets its own.
+  - Once the handover is done, add the "Where is my order?" subtopic on the order action from E06, and review guardrails.
   - Configure the two Knowledge-based Data Libraries.
   - Deliver the Outlook integration.
 - <strong>Done when:</strong>
-  - Casey passes the conversation test sets.
+  - Casey is live in production and passes regression testing on the handed-over actions and the new order subtopic.
   - Grounding acceptance tests pass on both libraries.
   - Escalation emails land on the Case.</p>
-<h3>Phase 3: Channels and CSR Productivity AI (8 weeks)</h3>
+<h3>Phase 3: Channels and CSR Productivity AI (9 weeks)</h3>
 <p><strong>Epics:</strong> E04 Casey Voice · E05 Web Chat and Web-to-Case · E10 CSR Productivity AI · <em>depends on: E02, E03, E09</em>
 - <strong>Goal:</strong>
   - Put Casey on voice, with calls from Vonage over SIP.
@@ -769,6 +772,7 @@
 - <strong>Done when:</strong>
   - Calls through Vonage reach Casey and hand back to a CSR with context.
   - Chat escalates from Casey to a CSR.
+  - Casey passes regression testing again on voice and chat.
   - Pilot CSRs accept the AI features.</p>
 <h3>Phase 4: Stabilization and Cutover (4 weeks)</h3>
 <p><strong>Epics:</strong> E12 · <em>depends on: E04, E05, E10</em>
@@ -838,9 +842,15 @@
 <td>G0015</td>
 </tr>
 <tr>
-<td>Casey needs more than ~5 custom subtopics</td>
+<td>The Casey proof of concept is late, or can't be promoted as built</td>
 <td>2</td>
-<td>E03 grows from L to XL</td>
+<td>E03 grows from S to M if Casey needs rework, or to L if PS has to build it; the order subtopic and voice slip</td>
+<td>G0021, G0308</td>
+</tr>
+<tr>
+<td>PCNA asks for more custom subtopics beyond "Where is my order?"</td>
+<td>2</td>
+<td>Extra scope on E03</td>
 <td>G0004</td>
 </tr>
 </tbody>
